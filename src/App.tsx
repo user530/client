@@ -3,7 +3,9 @@ import logo from './logo.svg';
 import { Counter } from './features/counter/Counter';
 import './App.css';
 import { io } from 'socket.io-client';
-import { ErrorMessage } from '@user530/ws_game_shared/interfaces';
+import { ErrorMessage, GameCommandDataType } from '@user530/ws_game_shared/interfaces';
+import { GameTableCol, GameTableRow } from '@user530/ws_game_shared/enums';
+import { GameInstanceComponent } from './pages/game-instance';
 
 function App() {
   const socket = io('http://localhost:5000');
@@ -11,6 +13,8 @@ function App() {
   React.useEffect(() => {
     socket.emit('message', (res: string) => console.log(res));
     socket.on('error', ({ code, message }: ErrorMessage) => console.error(`Error ${code}: ${message}`))
+    socket.on('game_over', (winner_id: string) => console.error(`Game Won: ${winner_id}`))
+    socket.on('new_state', ({ player_id, column, row }: GameCommandDataType) => console.error(`New Turn: Player ${player_id}: Column - ${column}, Row - ${row}`))
   })
 
   const btnHandler = () => {
@@ -20,10 +24,11 @@ function App() {
         type: 'game_command',
         command: 'make_turn',
         data: {
-          game_id: '77c9df73-5f52-4d28-92cf-d2402b843e95',
-          player_id: '3e2d0add-38e1-43c5-95d4-c734b0b93c5d',
-          row: 'Row_1',
-          column: 'Col_1',
+          game_id: '394f6fdc-a43f-4ed7-b0fd-90e767ff3f54',
+          player_id: 'bfb9551f-ee05-4b69-b19c-e471f81f3e4d', //Player1
+          // player_id: '6a3b895b-da50-422f-9d77-a861aa1c0a59', //Player2
+          row: GameTableRow.Row_3,
+          column: GameTableCol.Col_3,
         }
       }
     )
@@ -31,53 +36,7 @@ function App() {
 
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <Counter />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <span>
-          <span>Learn </span>
-          <a
-            className="App-link"
-            href="https://reactjs.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux-toolkit.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux Toolkit
-          </a>
-          ,<span> and </span>
-          <a
-            className="App-link"
-            href="https://react-redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React Redux
-          </a>
-        </span>
-        <button onClick={btnHandler}>EMIT</button>
-      </header>
-
+      <GameInstanceComponent />
     </div>
   );
 }

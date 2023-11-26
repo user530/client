@@ -1,11 +1,10 @@
 import React from 'react';
-import logo from './logo.svg';
-import { Counter } from './features/counter/Counter';
 import './App.css';
 import { io } from 'socket.io-client';
 import { ErrorMessage, GameCommandDataType } from '@user530/ws_game_shared/interfaces';
 import { GameTableCol, GameTableRow } from '@user530/ws_game_shared/enums';
 import { GameInstanceComponent } from './pages/game-instance';
+import { MessageType } from '@user530/ws_game_shared/types';
 
 function App() {
   const socket = io('http://localhost:5000');

@@ -1,7 +1,7 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 import { Provider } from 'react-redux';
-import { store } from './app/store';
+import gameStore from './app/store/ws_game_store';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import './index.css';
@@ -11,7 +11,7 @@ const root = createRoot(container);
 
 root.render(
   <React.StrictMode>
-    <Provider store={store}>
+    <Provider store={gameStore}>
       <App />
     </Provider>
   </React.StrictMode>

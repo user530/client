@@ -1,9 +1,9 @@
 import { combineReducers } from '@reduxjs/toolkit';
-import socketSlice from './slices/socket.slice';
+import socketMessagesSlice from './slices/socket-messages.slice';
 import gameInstanceSlice from './slices/game-instance.slice';
 
 export const rootReducer = combineReducers({
-    socket: socketSlice,
+    socket: socketMessagesSlice,
     gameInstance: gameInstanceSlice,
 });
 

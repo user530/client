@@ -15,7 +15,7 @@ function App() {
   const emitMessage = (ev: string, ...args: any[]) => {
     console.log(ev);
     console.log(...args);
-    sendMakeTurnMessage(args[0]);
+    dispatch(sendMakeTurnMessage(args[0]));
     // socketRef.current!.emit(ev, ...args);
   };
 

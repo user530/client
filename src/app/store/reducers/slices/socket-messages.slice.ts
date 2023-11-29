@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { GameCommandDataType } from '@user530/ws_game_shared/interfaces';
+import { GameCommandForfeit, GameCommandMakeTurn } from '@user530/ws_game_shared/interfaces';
 
 const initialState = {};
 
@@ -7,11 +7,11 @@ const socketMessagesSlice = createSlice({
     name: 'socketMessageSlice',
     initialState,
     reducers: {
-        sendMakeTurnMessage(state, action: PayloadAction<GameCommandDataType>) {
-            return 'SEND WS MESSAGE';
+        sendGameCommand(state, action: PayloadAction<GameCommandMakeTurn | GameCommandForfeit>) {
+            return 'SENT GAME COMMAND MESSAGE';
         }
     }
 });
 
-export const { sendMakeTurnMessage } = socketMessagesSlice.actions;
+export const { sendGameCommand } = socketMessagesSlice.actions;
 export default socketMessagesSlice.reducer;

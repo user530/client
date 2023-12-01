@@ -1,7 +1,7 @@
 import { AnyAction, Dispatch, Middleware, MiddlewareAPI } from '@reduxjs/toolkit';
 import { ErrorMessage, GameCommandDataType } from '@user530/ws_game_shared/interfaces';
-import { StoreDispatch } from '../ws_game_store';
-import { Socket, io } from 'socket.io-client';
+import { io } from 'socket.io-client';
+import { setGameField } from '../reducers/slices/game-instance.slice';
 
 export const createWSMiddleware: Middleware<any, any, Dispatch<AnyAction>> =
     (api: MiddlewareAPI<Dispatch<AnyAction>, any>) => {
@@ -10,7 +10,13 @@ export const createWSMiddleware: Middleware<any, any, Dispatch<AnyAction>> =
         socket.on('error', ({ code, message }: ErrorMessage) => console.error(`Error ${code}: ${message}`))
         socket.on('game_over_win', (winner_id: string) => console.log(`Game Won: ${winner_id}`))
         socket.on('game_over_draw', () => console.error(`Game Draw!`))
-        socket.on('new_turn', ({ player_id, column, row }: GameCommandDataType) => console.log(`New Turn: Player ${player_id}: Column - ${column}, Row - ${row}`))
+
+        socket.on('new_turn',
+            (newTurn: GameCommandDataType) => {
+                const { player_id, column, row } = newTurn;
+                console.log(`New Turn: Player ${player_id}: Column - ${column}, Row - ${row}`)
+                api.dispatch(setGameField(newTurn));
+            })
 
         return (next: Dispatch<AnyAction>) => (action: any) => {
             console.log('MIDDLEWARE FIRED!');
@@ -23,17 +29,3 @@ export const createWSMiddleware: Middleware<any, any, Dispatch<AnyAction>> =
             next(action);
         }
     }
-
-
-// (socketURI: string) => {
-//     return (storeAPI: string) => {
-//         console.log('CREATE MIDDLEWARE FIRED!');
-//         const socket = io(socketURI);
-
-//         return (next: any) => (action: any) => {
-//             console.log('MIDDLEWARE FIRED!');
-
-//             next(action);
-//         }
-//     }
-// }

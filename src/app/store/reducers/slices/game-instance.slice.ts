@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { GameTableCol, GameTableRow } from '@user530/ws_game_shared/enums';
+import { GameTurnDataType } from '@user530/ws_game_shared/interfaces/ws-events';
 
 interface IGameInstanceSlice {
     player_id: string | null;
@@ -42,11 +43,7 @@ const gameInstanceSlice = createSlice({
         setPlayer(state, action: PayloadAction<string>) {
             state.player_id = action.payload;
         },
-        setGameField(state, action: PayloadAction<{    // CHANGE PAYLOAD ACTION TYPE!                             // CHANGE TO THE GAME EVENT TYPES!
-            row: GameTableRow,
-            column: GameTableCol,
-            mark: 'X' | 'O',
-        }>) {
+        setGameField(state, action: PayloadAction<GameTurnDataType>) {
             const { row, column: col, mark } = action.payload;
 
             state.gameField[row][col] = mark;

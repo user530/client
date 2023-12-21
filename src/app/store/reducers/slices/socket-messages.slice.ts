@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { GameCommandForfeit, GameCommandMakeTurn } from '@user530/ws_game_shared/interfaces';
+import { GameCommandForfeit, GameCommandMakeTurn } from '@user530/ws_game_shared/interfaces/ws-messages';
 
 const initialState = {};
 

@@ -1,10 +1,9 @@
 import React from 'react';
 import styles from './game-field-cell.module.css';
 import { GameTableCol, GameTableRow } from '@user530/ws_game_shared/enums';
-import { createGameMakeTurnMessage } from '@user530/ws_game_shared/creators';
+import { createGameMakeTurnMessage } from '@user530/ws_game_shared/creators/messages';
 import { useAppSelector, useAppDispatch } from '../../../../app/hooks/useStore';
 import { sendGameCommand } from '../../../../app/store/reducers/slices/socket-messages.slice';
-import { setGameField } from '../../../../app/store/reducers/slices/game-instance.slice';
 import { isValidUUID } from '../../../../app/functions/uuid.validate';
 
 interface IGameFieldCell {

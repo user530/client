@@ -1,34 +1,52 @@
 import { AnyAction, Dispatch, Middleware, MiddlewareAPI } from '@reduxjs/toolkit';
-import { ErrorMessage, GameCommandDataType } from '@user530/ws_game_shared/interfaces';
+import { ErrorEvent, GameEventNewTurn, GameEventGameWon, GameEventGameDraw } from '@user530/ws_game_shared/interfaces/ws-events';
 import { io } from 'socket.io-client';
 import { setGameField } from '../reducers/slices/game-instance.slice';
-import { GameTableCol, GameTableRow } from '@user530/ws_game_shared/enums';
+import { GameInstanceEventsHandler } from '@user530/ws_game_shared/interfaces/ws-listeners';
+import { GameEvent, MessageType } from '@user530/ws_game_shared/types';
+
 
 export const createWSMiddleware: Middleware<any, any, Dispatch<AnyAction>> =
     (api: MiddlewareAPI<Dispatch<AnyAction>, any>) => {
         const socket = io('http://localhost:5000');
 
-        socket.on('error', ({ code, message }: ErrorMessage) => console.error(`Error ${code}: ${message}`))
-        socket.on('game_over_win', (winner_id: string) => console.log(`Game Won: ${winner_id}`))
-        socket.on('game_over_draw', () => console.error(`Game Draw!`))
+        const gameEventHandler: GameInstanceEventsHandler = {
+            async wsErrorListener(errEvent: ErrorEvent): Promise<void> {
+                console.log('Socket - Error Event!');
+                const { code, message } = errEvent;
+                console.error(`Error: ${code} ${message}`);
+            },
 
-        socket.on('new_turn',
-            (newTurn: {                                 // CHANGE TO THE GAME EVENT TYPES!
-                row: GameTableRow,
-                column: GameTableCol,
-                mark: 'X' | 'O',
-            }) => {
-                const { mark, column, row } = newTurn;
-                console.log(`New Turn Recieved!`);
-                console.log(mark);
-                api.dispatch(setGameField(newTurn));
-            })
+            async wsGameNewTurnListener(newTurnEvent: GameEventNewTurn): Promise<void> {
+                console.log('Socket - New Turn Event!');
+                console.log(newTurnEvent);
+
+                const { data: newTurnData } = newTurnEvent;
+                api.dispatch(setGameField(newTurnData));
+            },
+
+            async wsGameWonListener(gameWonEvent: GameEventGameWon): Promise<void> {
+                console.log('Socket - Game Won Event!');
+                console.log(gameWonEvent);
+            },
+
+            async wsGameDrawListener(gameDrawEvent: GameEventGameDraw): Promise<void> {
+                console.log('Socket - Game Draw Event!');
+                console.log(gameDrawEvent);
+            },
+        }
+
+        socket.on(MessageType.ErrorMessage, gameEventHandler.wsErrorListener);
+
+        socket.on(GameEvent.GameWon, gameEventHandler.wsGameWonListener);
+        socket.on(GameEvent.GameDraw, gameEventHandler.wsGameDrawListener);
+        socket.on(GameEvent.NewTurn, gameEventHandler.wsGameNewTurnListener);
 
         return (next: Dispatch<AnyAction>) => (action: any) => {
             console.log('MIDDLEWARE FIRED!');
 
             if (action.type === 'socketMessageSlice/sendGameCommand') {
-                const { version, type, command, data } = action.payload;
+                const { command } = action.payload;
                 socket.emit(command, action.payload);
             }
 

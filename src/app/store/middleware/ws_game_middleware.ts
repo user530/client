@@ -8,7 +8,8 @@ import { GameEvent, MessageType } from '@user530/ws_game_shared/types';
 
 export const createWSMiddleware: Middleware<any, any, Dispatch<AnyAction>> =
     (api: MiddlewareAPI<Dispatch<AnyAction>, any>) => {
-        const socket = io('http://localhost:5000');
+        // const socket = io('http://localhost:5000', { extraHeaders: { Top: 'Default' } });
+        const gameSocket = io('http://localhost:5000/game', { extraHeaders: { Top: 'Game' } });
 
         const gameEventHandler: GameInstanceEventsHandler = {
             async wsErrorListener(errEvent: ErrorEvent): Promise<void> {
@@ -36,18 +37,17 @@ export const createWSMiddleware: Middleware<any, any, Dispatch<AnyAction>> =
             },
         }
 
-        socket.on(MessageType.ErrorMessage, gameEventHandler.wsErrorListener);
-
-        socket.on(GameEvent.GameWon, gameEventHandler.wsGameWonListener);
-        socket.on(GameEvent.GameDraw, gameEventHandler.wsGameDrawListener);
-        socket.on(GameEvent.NewTurn, gameEventHandler.wsGameNewTurnListener);
+        gameSocket.on(MessageType.ErrorMessage, gameEventHandler.wsErrorListener);
+        gameSocket.on(GameEvent.GameWon, gameEventHandler.wsGameWonListener);
+        gameSocket.on(GameEvent.GameDraw, gameEventHandler.wsGameDrawListener);
+        gameSocket.on(GameEvent.NewTurn, gameEventHandler.wsGameNewTurnListener);
 
         return (next: Dispatch<AnyAction>) => (action: any) => {
             console.log('MIDDLEWARE FIRED!');
 
             if (action.type === 'socketMessageSlice/sendGameCommand') {
                 const { command } = action.payload;
-                socket.emit(command, action.payload);
+                gameSocket.emit(command, action.payload);
             }
 
             next(action);

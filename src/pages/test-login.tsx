@@ -1,6 +1,7 @@
 import React, { MouseEvent } from 'react';
 import { useAppDispatch } from '../app/hooks/useStore';
 import { setGame, setPlayer } from '../app/store/reducers/slices/game-instance.slice';
+import { gameSocketConnection } from '../app/store/reducers/slices/socket-messages.slice';
 import { isValidUUID } from '../app/functions/uuid.validate';
 
 export const TestLoginPage: React.FC = () => {
@@ -27,6 +28,8 @@ export const TestLoginPage: React.FC = () => {
 
         dispatch(setGame(game_id));
         dispatch(setPlayer(player_id));
+
+        dispatch(gameSocketConnection());
     }
 
     return (

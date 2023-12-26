@@ -1,24 +1,31 @@
 import React from 'react';
+import { useAppDispatch } from '../../app/hooks/useStore';
+import { setPopup } from '../../app/store/reducers/slices/game-instance.slice';
 
 interface IPopUpWindow {
     message: string;
     type: 'green' | 'red' | 'yellow';
-    button?: {
-        text: string;
-        cb: () => any;
-    }
+    cb?: (...args: any) => any;
 };
 
 export const PopUpWindow: React.FC<IPopUpWindow> = (props: IPopUpWindow) => {
-    const { message, type, button } = props;
+    const { message, type, cb } = props;
+    const dispatch = useAppDispatch();
+
+    const btnHandler = () => {
+        // Execute optional callback
+        if (cb) cb();
+
+        // Close pop-up
+        dispatch(setPopup(null));
+    }
+
     return <>
         <div style={{ backgroundColor: type }}>
             <p>{message}</p>
 
             {
-                button && (Object.keys(button).length > 0)
-                    ? <button onClick={button.cb}>{button.text}</button>
-                    : null
+                <button onClick={btnHandler}>Ok</button>
             }
         </div>
     </>

@@ -1,7 +1,7 @@
 import { AnyAction, Dispatch, Middleware, MiddlewareAPI } from '@reduxjs/toolkit';
 import { ErrorEvent, GameEventNewTurn, GameEventGameWon, GameEventGameDraw } from '@user530/ws_game_shared/interfaces/ws-events';
 import { Socket, io } from 'socket.io-client';
-import { setGameField } from '../reducers/slices/game-instance.slice';
+import { setGameField, setPopup } from '../reducers/slices/game-instance.slice';
 import { GameInstanceEventsHandler } from '@user530/ws_game_shared/interfaces/ws-listeners';
 import { GameEvent, MessageType } from '@user530/ws_game_shared/types';
 import { RootState, StoreDispatch } from '../ws_game_store';
@@ -31,11 +31,16 @@ export const createWSMiddleware: Middleware<any, any, Dispatch<AnyAction>> =
             async wsGameWonListener(gameWonEvent: GameEventGameWon): Promise<void> {
                 console.log('Socket - Game Won Event!');
                 console.log(gameWonEvent);
+                if (gameWonEvent.data.player_id === api.getState().gameInstance.player_id)
+                    api.dispatch(setPopup('win'))
+                else
+                    api.dispatch(setPopup('loose'))
             },
 
             async wsGameDrawListener(gameDrawEvent: GameEventGameDraw): Promise<void> {
                 console.log('Socket - Game Draw Event!');
                 console.log(gameDrawEvent);
+                api.dispatch(setPopup('draw'))
             },
         }
 

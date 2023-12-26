@@ -3,13 +3,14 @@ import { GameTableCol, GameTableRow } from '@user530/ws_game_shared/enums';
 import { GameTurnDataType } from '@user530/ws_game_shared/interfaces/ws-events';
 
 interface IGameInstanceSlice {
-    player_id: string | null;
-    game_id: string | null;
+    player_id: string | null,
+    game_id: string | null,
     gameField: {
         -readonly [key in keyof typeof GameTableRow]: {
             -readonly [key in keyof typeof GameTableCol]: string | null;
         }
     },
+    popupWindow: 'win' | 'loose' | 'draw' | null,
 }
 
 const gameField = Object.keys(GameTableRow).reduce(
@@ -30,17 +31,18 @@ const gameField = Object.keys(GameTableRow).reduce(
 const initialState: IGameInstanceSlice = {
     game_id: null,
     player_id: null,
-    gameField
+    gameField,
+    popupWindow: null,
 }
 
 const gameInstanceSlice = createSlice({
     name: 'gameInstanceSlice',
     initialState,
     reducers: {
-        setGame(state, action: PayloadAction<string>) {
+        setGame(state, action: PayloadAction<string | null>) {
             state.game_id = action.payload;
         },
-        setPlayer(state, action: PayloadAction<string>) {
+        setPlayer(state, action: PayloadAction<string | null>) {
             state.player_id = action.payload;
         },
         setGameField(state, action: PayloadAction<GameTurnDataType>) {
@@ -48,8 +50,11 @@ const gameInstanceSlice = createSlice({
 
             state.gameField[row][col] = mark;
         },
+        setPopup(state, action: PayloadAction<'win' | 'loose' | 'draw' | null>) {
+            state.popupWindow = action.payload;
+        }
     }
 })
 
-export const { setGame, setPlayer, setGameField } = gameInstanceSlice.actions;
+export const { setGame, setPlayer, setGameField, setPopup } = gameInstanceSlice.actions;
 export default gameInstanceSlice.reducer;

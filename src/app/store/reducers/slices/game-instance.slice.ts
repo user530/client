@@ -1,10 +1,15 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { GameTableCol, GameTableRow } from '@user530/ws_game_shared/enums';
-import { GameTurnDataType } from '@user530/ws_game_shared/interfaces/ws-events';
+import { GameEventTurnData } from '@user530/ws_game_shared/interfaces/ws-events';
+
+interface PlayerData {
+    playerId: string;
+    playerName: string;
+}
 
 interface IGameInstanceSlice {
-    player_id: string | null,
-    game_id: string | null,
+    player: PlayerData | null,
+    gameId: string | null,
     gameField: {
         -readonly [key in keyof typeof GameTableRow]: {
             -readonly [key in keyof typeof GameTableCol]: string | null;
@@ -13,7 +18,7 @@ interface IGameInstanceSlice {
     popupWindow: 'win' | 'loose' | 'draw' | null,
 }
 
-const gameField = Object.keys(GameTableRow).reduce(
+const defaultGameField = Object.keys(GameTableRow).reduce(
     (fieldObj, row) => {
         fieldObj[row as keyof typeof GameTableRow] = Object.keys(GameTableCol).reduce(
             (rowObj, col) => {
@@ -29,9 +34,9 @@ const gameField = Object.keys(GameTableRow).reduce(
 )
 
 const initialState: IGameInstanceSlice = {
-    game_id: null,
-    player_id: null,
-    gameField,
+    gameId: null,
+    player: null,
+    gameField: defaultGameField,
     popupWindow: null,
 }
 
@@ -40,12 +45,12 @@ const gameInstanceSlice = createSlice({
     initialState,
     reducers: {
         setGame(state, action: PayloadAction<string | null>) {
-            state.game_id = action.payload;
+            state.gameId = action.payload;
         },
-        setPlayer(state, action: PayloadAction<string | null>) {
-            state.player_id = action.payload;
+        setPlayer(state, action: PayloadAction<PlayerData | null>) {
+            state.player = action.payload;
         },
-        setGameField(state, action: PayloadAction<GameTurnDataType>) {
+        setGameField(state, action: PayloadAction<GameEventTurnData>) {
             const { row, column: col, mark } = action.payload;
 
             state.gameField[row][col] = mark;

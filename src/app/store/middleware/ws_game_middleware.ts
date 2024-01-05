@@ -31,7 +31,8 @@ export const createWSMiddleware: Middleware<any, any, Dispatch<AnyAction>> =
             async wsGameWonListener(gameWonEvent: GameEventGameWon): Promise<void> {
                 console.log('Socket - Game Won Event!');
                 console.log(gameWonEvent);
-                if (gameWonEvent.data.player_id === api.getState().gameInstance.player_id)
+                const playerName = api.getState().gameInstance.player?.playerName;
+                if (gameWonEvent.data.playerName === playerName)
                     api.dispatch(setPopup('win'))
                 else
                     api.dispatch(setPopup('loose'))
@@ -54,17 +55,17 @@ export const createWSMiddleware: Middleware<any, any, Dispatch<AnyAction>> =
             else if (action.type === 'socketMessageSlice/gameSocketConnection') {
                 console.log('ACTION - CONNECT TO THE GAME WEBSOCKET');
 
-                const { gameInstance: { player_id: playerId, game_id: gameId } } = api.getState();
+                const { gameInstance: { gameId, player } } = api.getState();
 
                 // Connect to the WS game namespace with auth
                 gameSocket = io('http://localhost:5000/game',
                     {
                         auth: {
-                            userId: playerId,
+                            userId: player?.playerId,
                             gameId: gameId
                         }
                     });
-                gameSocket.on('connect', () => console.log(gameSocket))
+                gameSocket.on('connect', () => console.log('SOCKET CONNECTED!'))
                 gameSocket.on('disconnect', () => console.log('SOCKET DISCONNECTED!'))
                 // Set up game listeners
                 gameSocket.on(MessageType.ErrorMessage, gameEventHandler.wsErrorListener);

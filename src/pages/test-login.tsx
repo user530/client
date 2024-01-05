@@ -8,26 +8,28 @@ export const TestLoginPage: React.FC = () => {
     const dispatch = useAppDispatch();
 
     const gameRef = React.useRef<HTMLInputElement | null>(null);
-    const playerRef = React.useRef<HTMLInputElement | null>(null);
+    const playerIdRef = React.useRef<HTMLInputElement | null>(null);
+    const playerNameRef = React.useRef<HTMLInputElement | null>(null);
 
     const handleJoinBtn = (e: MouseEvent) => {
         e.preventDefault();
 
-        const game_id = gameRef.current?.value?.trim();
-        const player_id = playerRef.current?.value?.trim();
+        const gameId = gameRef.current?.value?.trim();
+        const playerId = playerIdRef.current?.value?.trim();
+        const playerName = playerNameRef.current?.value?.trim();
 
-        console.log('Game: ' + game_id);
-        console.log('Player: ' + player_id);
+        console.log('Game: ' + gameId);
+        console.log('Player: ' + playerId + playerName);
 
-        if (!game_id || !player_id)
-            return alert('Enter game and user ID');
+        if (!gameId || !playerId || !playerName)
+            return alert('Enter game and user data');
 
 
-        if (!isValidUUID(game_id) || !isValidUUID(player_id))
+        if (!isValidUUID(gameId) || !isValidUUID(playerId))
             return alert('Game and player IDs should be valid UUID');
 
-        dispatch(setGame(game_id));
-        dispatch(setPlayer(player_id));
+        dispatch(setGame(gameId));
+        dispatch(setPlayer({ playerId, playerName }));
 
         dispatch(gameSocketConnection());
     }
@@ -42,8 +44,13 @@ export const TestLoginPage: React.FC = () => {
 
                 <label>
                     Player ID:
-                    <input type="text" ref={playerRef} defaultValue={'bfb9551f-ee05-4b69-b19c-e471f81f3e4d'}></input>
+                    <input type="text" ref={playerIdRef} defaultValue={'bfb9551f-ee05-4b69-b19c-e471f81f3e4d'}></input>
                     <input type="text" defaultValue={'6a3b895b-da50-422f-9d77-a861aa1c0a59'}></input>
+                </label>
+
+                <label>
+                    Player Name:
+                    <input type="text" ref={playerNameRef} defaultValue={'player_1'}></input>
                 </label>
 
                 <button onClick={handleJoinBtn}>Join</button>

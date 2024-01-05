@@ -2,8 +2,8 @@ import { AnyAction, Dispatch, Middleware, MiddlewareAPI } from '@reduxjs/toolkit
 import { ErrorEvent, GameEventNewTurn, GameEventGameWon, GameEventGameDraw } from '@user530/ws_game_shared/interfaces/ws-events';
 import { Socket, io } from 'socket.io-client';
 import { setGameField, setPopup } from '../reducers/slices/game-instance.slice';
-import { GameInstanceEventsHandler } from '@user530/ws_game_shared/interfaces/ws-listeners';
-import { GameEvent, MessageType } from '@user530/ws_game_shared/types';
+import { GameInstanceEventsHandler, GameHubEventsHandler } from '@user530/ws_game_shared/interfaces/ws-listeners';
+import { GameEvent, HubEvent, MessageType } from '@user530/ws_game_shared/types';
 import { RootState, StoreDispatch } from '../ws_game_store';
 
 
@@ -12,6 +12,24 @@ export const createWSMiddleware: Middleware<any, any, Dispatch<AnyAction>> =
         // const socket = io('http://localhost:5000', { extraHeaders: { Top: 'Default' } });
 
         let gameSocket: Socket;
+
+        const hubEventHandler: GameHubEventsHandler = {
+            async wsErrorListener(errEvent: ErrorEvent) {
+                console.log('Socket - Error Event!');
+            },
+
+            async wsHubGamesUpdatedListener(gamesUpdatedEvent) {
+                console.log('Socket - HUB GAMES UPDATE EVENT!');
+            },
+
+            async wsHubMovedToLobbyListener(movedToLobbyEvent) {
+                console.log('Socket - HUB MOVED TO LOBBY EVENT!');
+            },
+
+            async wsHubQuitHubListener(quitHubEvent) {
+                console.log('Socket - HUB QUIT HUB EVENT!');
+            },
+        }
 
         const gameEventHandler: GameInstanceEventsHandler = {
             async wsErrorListener(errEvent: ErrorEvent): Promise<void> {
@@ -65,13 +83,36 @@ export const createWSMiddleware: Middleware<any, any, Dispatch<AnyAction>> =
                             gameId: gameId
                         }
                     });
-                gameSocket.on('connect', () => console.log('SOCKET CONNECTED!'))
-                gameSocket.on('disconnect', () => console.log('SOCKET DISCONNECTED!'))
+
+                gameSocket.on('connect', () => console.log('GAME SOCKET CONNECTED!'))
+                gameSocket.on('disconnect', () => console.log('GAME SOCKET DISCONNECTED!'))
                 // Set up game listeners
                 gameSocket.on(MessageType.ErrorMessage, gameEventHandler.wsErrorListener);
                 gameSocket.on(GameEvent.GameWon, gameEventHandler.wsGameWonListener);
                 gameSocket.on(GameEvent.GameDraw, gameEventHandler.wsGameDrawListener);
                 gameSocket.on(GameEvent.NewTurn, gameEventHandler.wsGameNewTurnListener);
+            }
+            else if (action.type === 'socketMessageSlice/hubSocketConnection') {
+                console.log('ACTION - CONNECT TO THE HUB WEBSOCKET');
+
+                // ADD SEPARATE SLICE FOR THE PLAYER?
+                const { gameInstance: { player } } = api.getState();
+
+                // Connect to the WS game namespace with auth
+                gameSocket = io('http://localhost:5000/hub',
+                    {
+                        auth: {
+                            userId: player?.playerId,
+                        }
+                    });
+
+                gameSocket.on('connect', () => console.log('HUB SOCKET CONNECTED!'))
+                gameSocket.on('disconnect', () => console.log('HUB SOCKET DISCONNECTED!'))
+                // Set up game listeners
+                gameSocket.on(MessageType.ErrorMessage, hubEventHandler.wsErrorListener);
+                gameSocket.on(HubEvent.GamesUpdated, hubEventHandler.wsHubGamesUpdatedListener);
+                gameSocket.on(HubEvent.MovedToLobby, hubEventHandler.wsHubMovedToLobbyListener);
+                gameSocket.on(HubEvent.QuitHub, hubEventHandler.wsHubQuitHubListener);
             }
 
             next(action);

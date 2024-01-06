@@ -28,7 +28,7 @@ export const TestLoginPage: React.FC = () => {
         if (!isValidUUID(gameId) || !isValidUUID(playerId))
             return alert('Game and player IDs should be valid UUID');
 
-        dispatch(setGame(gameId));
+        // dispatch(setGame(gameId));
         dispatch(setPlayer({ playerId, playerName }));
 
         // dispatch(gameSocketConnection());                    DELETE LATER

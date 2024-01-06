@@ -3,6 +3,7 @@ import './App.css';
 import { GameInstancePage } from './pages/game-instance';
 import { useAppSelector } from './app/hooks/useStore';
 import { TestLoginPage } from './pages/test-login';
+import { GameHubPage } from './pages/game-hub';
 
 function App() {
   const playerId = useAppSelector((state) => state.gameInstance.player?.playerId);
@@ -13,7 +14,9 @@ function App() {
       {
         gameId && playerId
           ? <GameInstancePage />
-          : <TestLoginPage />
+          : playerId
+            ? <GameHubPage />
+            : <TestLoginPage />
       }
 
     </div>

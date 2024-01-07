@@ -1,4 +1,7 @@
 import React from 'react';
+import { useAppDispatch, useAppSelector } from '../app/hooks/useStore';
+import { sendSocketCommand } from '../app/store/reducers/slices/socket-messages.slice';
+import { createHubHostMessage, createHubJoinMessage, createHubLeaveMessage } from '@user530/ws_game_shared/creators/messages';
 
 interface IGameHubPage {
 
@@ -11,16 +14,32 @@ export const GameHubPage: React.FC<IGameHubPage> = (props: IGameHubPage) => {
         { id: 3, name: 'ccc' },
     ];
 
+    const dispatch = useAppDispatch();
+    const playerId = useAppSelector((state) => state.gameInstance.player)?.playerId;
+
     let selectedLobbyId: null | number = null;
 
     const setSelectedLobby = (id: number) => {
-
         selectedLobbyId = id;
         console.log('Lobby selected: ', selectedLobbyId)
     };
-    const handleQuitHubClick = () => { console.log('Quit btn clicked!') };
-    const handleHostGameClick = () => { console.log('Host Game btn clicked!') };
-    const handleJoinGameClick = () => { console.log('Join Game btn clicked!') };
+
+    const handleQuitHubClick = () => {
+        console.log('Quit btn clicked!');
+        if (!playerId) return;
+        dispatch(sendSocketCommand(createHubLeaveMessage()));
+    };
+
+    const handleHostGameClick = () => {
+        console.log('Host Game btn clicked!');
+        if (!playerId) return;
+        dispatch(sendSocketCommand(createHubHostMessage({ playerId })));
+    };
+    const handleJoinGameClick = () => {
+        console.log('Join Game btn clicked!');
+        if (!playerId || !selectedLobbyId) return;
+        dispatch(sendSocketCommand(createHubJoinMessage({ playerId, lobbyId: '' + selectedLobbyId })));
+    };
 
     return <>
         <div style={{ minWidth: 600, minHeight: 350, backgroundColor: 'gray', padding: 50 }}>

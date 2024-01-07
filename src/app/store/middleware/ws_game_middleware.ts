@@ -4,7 +4,7 @@ import { Socket, io } from 'socket.io-client';
 import { setGameField, setPopup } from '../reducers/slices/game-instance.slice';
 import { GameInstanceEventsHandler, GameHubEventsHandler } from '@user530/ws_game_shared/interfaces/ws-listeners';
 import { GameEvent, HubEvent, MessageType } from '@user530/ws_game_shared/types';
-import { RootState, StoreDispatch } from '../ws_game_store';
+import { RootState, StoreDispatch, AllActionsType } from '../ws_game_store';
 
 
 export const createWSMiddleware: Middleware<any, any, Dispatch<AnyAction>> =
@@ -63,10 +63,10 @@ export const createWSMiddleware: Middleware<any, any, Dispatch<AnyAction>> =
             },
         }
 
-        return (next: StoreDispatch) => (action: any) => {
+        return (next: StoreDispatch) => (action: AllActionsType) => {
             console.log('MIDDLEWARE FIRED!');
             console.log(action.type);
-            if (action.type === 'socketMessageSlice/sendGameCommand') {
+            if (action.type === 'socketMessageSlice/sendSocketCommand') {
                 const { command } = action.payload;
                 gameSocket.emit(command, action.payload);
             }

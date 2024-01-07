@@ -62,4 +62,4 @@ const gameInstanceSlice = createSlice({
 })
 
 export const { setGame, setPlayer, setGameField, setPopup } = gameInstanceSlice.actions;
-export default gameInstanceSlice.reducer;
+export default gameInstanceSlice;

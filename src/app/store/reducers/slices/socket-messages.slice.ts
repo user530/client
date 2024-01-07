@@ -1,5 +1,12 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { GameCommandForfeit, GameCommandMakeTurn } from '@user530/ws_game_shared/interfaces/ws-messages';
+import {
+    HubCommandHostGame,
+    HubCommandJoinGame,
+    HubCommandLeaveHub,
+    GameCommandForfeit,
+    GameCommandMakeTurn,
+} from '@user530/ws_game_shared/interfaces/ws-messages';
+
 
 const initialState = {};
 
@@ -13,12 +20,18 @@ const socketMessagesSlice = createSlice({
         gameSocketConnection() {
             return 'CONNECT TO THE WS GAME SOCKET';
         },
-        sendGameCommand(state, action: PayloadAction<GameCommandMakeTurn | GameCommandForfeit>) {
+        sendSocketCommand(state, action: PayloadAction<
+            | HubCommandHostGame
+            | HubCommandJoinGame
+            | HubCommandLeaveHub
+            | GameCommandMakeTurn
+            | GameCommandForfeit
+        >) {
             return 'SENT GAME COMMAND MESSAGE';
-        }
+        },
 
     }
 });
 
-export const { sendGameCommand, gameSocketConnection, hubSocketConnection } = socketMessagesSlice.actions;
-export default socketMessagesSlice.reducer;
+export const { sendSocketCommand, gameSocketConnection, hubSocketConnection } = socketMessagesSlice.actions;
+export default socketMessagesSlice;

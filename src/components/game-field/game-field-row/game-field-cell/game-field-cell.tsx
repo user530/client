@@ -3,7 +3,7 @@ import styles from './game-field-cell.module.css';
 import { GameTableCol, GameTableRow } from '@user530/ws_game_shared/enums';
 import { createInstanceMakeTurnMessage } from '@user530/ws_game_shared/creators/messages';
 import { useAppSelector, useAppDispatch } from '../../../../app/hooks/useStore';
-import { sendGameCommand } from '../../../../app/store/reducers/slices/socket-messages.slice';
+import { sendSocketCommand } from '../../../../app/store/reducers/slices/socket-messages.slice';
 import { isValidUUID } from '../../../../app/functions/uuid.validate';
 
 interface IGameFieldCell {
@@ -28,7 +28,7 @@ export const GameFieldCell: React.FC<IGameFieldCell> = (props: IGameFieldCell) =
 
         const turnMessage = createInstanceMakeTurnMessage({ row, column, playerId, gameId });
 
-        dispatch(sendGameCommand(turnMessage));
+        dispatch(sendSocketCommand(turnMessage));
     };
 
     return (

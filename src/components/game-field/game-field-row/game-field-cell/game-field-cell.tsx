@@ -16,9 +16,9 @@ export const GameFieldCell: React.FC<IGameFieldCell> = (props: IGameFieldCell) =
 
     console.log(`GAME FIELD CELL ${row}:${column}`)
 
-    const playerId = useAppSelector((state) => state.gameInstance.player?.playerId);
-    const gameId = useAppSelector((state) => state.gameInstance.gameId);
-    const gameGrid = useAppSelector((state) => state.gameInstance.gameField[row][column])
+    const playerId = useAppSelector((state) => state.gameData.player?.playerId);
+    const gameId = useAppSelector((state) => state.gameData.gameId);
+    const gameGrid = useAppSelector((state) => state.gameData.gameField[row][column])
 
     const dispatch = useAppDispatch();
 

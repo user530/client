@@ -9,8 +9,8 @@ interface IForfeitGameBtn {
 }
 
 export const ForfeitGameBtn: React.FC<IForfeitGameBtn> = (props: IForfeitGameBtn) => {
-    const playerId = useAppSelector((state) => state.gameInstance.player?.playerId);
-    const gameId = useAppSelector((state) => state.gameInstance.gameId);
+    const playerId = useAppSelector((state) => state.gameData.player?.playerId);
+    const gameId = useAppSelector((state) => state.gameData.gameId);
 
     const dispatch = useAppDispatch();
 

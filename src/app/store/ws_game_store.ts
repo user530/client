@@ -12,5 +12,5 @@ const gameStore = configureStore({
 
 export type RootState = ReturnType<typeof gameStore.getState>;
 export type StoreDispatch = typeof gameStore.dispatch;
-export type AllActionsType = RootActionsType;
+export type StoreActions = RootActionsType;
 export default gameStore;

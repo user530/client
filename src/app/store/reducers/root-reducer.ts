@@ -1,14 +1,15 @@
 import { combineReducers } from '@reduxjs/toolkit';
 import socketMessagesSlice from './slices/socket-messages.slice';
-import gameInstanceSlice from './slices/game-instance.slice';
-import { AllReducerActions } from '../../../shared/types';
+import gameDataSlice from './slices/game-data.slice';
 
 export const rootReducer = combineReducers({
     socket: socketMessagesSlice.reducer,
-    gameInstance: gameInstanceSlice.reducer,
+    gameData: gameDataSlice.reducer,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;
+
+type ActionsType<ReducerActions> = ReducerActions[keyof ReducerActions] extends (...args: any[]) => infer R ? R : never;
 export type RootActionsType =
-    | AllReducerActions<typeof socketMessagesSlice.actions>
-    | AllReducerActions<typeof gameInstanceSlice.actions>
+    | ActionsType<typeof socketMessagesSlice.actions>
+    | ActionsType<typeof gameDataSlice.actions>

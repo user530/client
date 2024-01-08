@@ -8,18 +8,13 @@ interface IGameHubPage {
 }
 
 export const GameHubPage: React.FC<IGameHubPage> = (props: IGameHubPage) => {
-    const lobbyList = [
-        { id: 1, name: 'asd' },
-        { id: 2, name: 'bbb' },
-        { id: 3, name: 'ccc' },
-    ];
-
     const dispatch = useAppDispatch();
-    const playerId = useAppSelector((state) => state.gameInstance.player)?.playerId;
+    const playerId = useAppSelector((state) => state.gameData.player)?.playerId;
+    const lobbyList = useAppSelector((state) => state.gameData.lobbyList);
 
-    let selectedLobbyId: null | number = null;
+    let selectedLobbyId: null | string = null;
 
-    const setSelectedLobby = (id: number) => {
+    const setSelectedLobby = (id: string) => {
         selectedLobbyId = id;
         console.log('Lobby selected: ', selectedLobbyId)
     };
@@ -46,13 +41,13 @@ export const GameHubPage: React.FC<IGameHubPage> = (props: IGameHubPage) => {
             <div className="lobby-list" style={{ minWidth: 300, minHeight: 200, backgroundColor: 'white' }} >
                 {
                     lobbyList.map(
-                        ({ id, name }) => (
+                        ({ gameId, hostName }) => (
                             <div
-                                key={id}
+                                key={gameId}
                                 style={{ display: 'flex' }}
-                                onClick={(e) => setSelectedLobby(id)}>
-                                <p>{id}</p>
-                                <p>{name}</p>
+                                onClick={(e) => setSelectedLobby(gameId)}>
+                                <p>{gameId}</p>
+                                <p>{hostName}</p>
                             </div>
                         )
                     )

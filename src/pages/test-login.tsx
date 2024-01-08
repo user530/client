@@ -1,6 +1,6 @@
 import React, { MouseEvent } from 'react';
 import { useAppDispatch } from '../app/hooks/useStore';
-import { setGame, setPlayer } from '../app/store/reducers/slices/game-instance.slice';
+import { setGame, setPlayer } from '../app/store/reducers/slices/game-data.slice';
 import { hubSocketConnection } from '../app/store/reducers/slices/socket-messages.slice';
 import { isValidUUID } from '../app/functions/uuid.validate';
 

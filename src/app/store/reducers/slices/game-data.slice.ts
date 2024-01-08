@@ -7,15 +7,21 @@ interface PlayerData {
     playerName: string;
 }
 
-interface IGameInstanceSlice {
-    player: PlayerData | null,
-    gameId: string | null,
+interface LobbyData {
+    gameId: string;
+    hostName: string;
+}
+
+interface IGameDataSlice {
+    lobbyList: LobbyData[];
+    player: PlayerData | null;
+    gameId: string | null;
     gameField: {
         -readonly [key in keyof typeof GameTableRow]: {
             -readonly [key in keyof typeof GameTableCol]: string | null;
         }
-    },
-    popupWindow: 'win' | 'loose' | 'draw' | null,
+    };
+    popupWindow: 'win' | 'loose' | 'draw' | null;
 }
 
 const defaultGameField = Object.keys(GameTableRow).reduce(
@@ -30,20 +36,24 @@ const defaultGameField = Object.keys(GameTableRow).reduce(
 
         return fieldObj
 
-    }, {} as IGameInstanceSlice['gameField']
+    }, {} as IGameDataSlice['gameField']
 )
 
-const initialState: IGameInstanceSlice = {
+const initialState: IGameDataSlice = {
+    lobbyList: [],
     gameId: null,
     player: null,
     gameField: defaultGameField,
     popupWindow: null,
 }
 
-const gameInstanceSlice = createSlice({
-    name: 'gameInstanceSlice',
+const gameDataSlice = createSlice({
+    name: 'gameDataSlice',
     initialState,
     reducers: {
+        setLobbyList(state, action: PayloadAction<LobbyData[]>) {
+            state.lobbyList = action.payload;
+        },
         setGame(state, action: PayloadAction<string | null>) {
             state.gameId = action.payload;
         },
@@ -61,5 +71,5 @@ const gameInstanceSlice = createSlice({
     }
 })
 
-export const { setGame, setPlayer, setGameField, setPopup } = gameInstanceSlice.actions;
-export default gameInstanceSlice;
+export const { setGame, setPlayer, setGameField, setPopup, setLobbyList } = gameDataSlice.actions;
+export default gameDataSlice;

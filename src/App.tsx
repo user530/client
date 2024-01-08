@@ -6,8 +6,8 @@ import { TestLoginPage } from './pages/test-login';
 import { GameHubPage } from './pages/game-hub';
 
 function App() {
-  const playerId = useAppSelector((state) => state.gameInstance.player?.playerId);
-  const gameId = useAppSelector((state) => state.gameInstance.gameId);
+  const playerId = useAppSelector((state) => state.gameData.player?.playerId);
+  const gameId = useAppSelector((state) => state.gameData.gameId);
 
   return (
     <div className="App">

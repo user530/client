@@ -1,6 +1,6 @@
 import React from 'react';
 import { useAppDispatch } from '../../app/hooks/useStore';
-import { setPopup } from '../../app/store/reducers/slices/game-instance.slice';
+import { setPopup } from '../../app/store/reducers/slices/game-data.slice';
 
 interface IPopUpWindow {
     message: string;

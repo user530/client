@@ -1,10 +1,10 @@
 import { AnyAction, Dispatch, Middleware, MiddlewareAPI } from '@reduxjs/toolkit';
 import { ErrorEvent, GameEventNewTurn, GameEventGameWon, GameEventGameDraw } from '@user530/ws_game_shared/interfaces/ws-events';
 import { Socket, io } from 'socket.io-client';
-import { setGameField, setPopup } from '../reducers/slices/game-instance.slice';
+import { setGameField, setLobbyList, setPopup } from '../reducers/slices/game-data.slice';
 import { GameInstanceEventsHandler, GameHubEventsHandler } from '@user530/ws_game_shared/interfaces/ws-listeners';
 import { GameEvent, HubEvent, MessageType } from '@user530/ws_game_shared/types';
-import { RootState, StoreDispatch, AllActionsType } from '../ws_game_store';
+import { RootState, StoreDispatch, StoreActions } from '../ws_game_store';
 
 
 export const createWSMiddleware: Middleware<any, any, Dispatch<AnyAction>> =
@@ -20,6 +20,10 @@ export const createWSMiddleware: Middleware<any, any, Dispatch<AnyAction>> =
 
             async wsHubGamesUpdatedListener(gamesUpdatedEvent) {
                 console.log('Socket - HUB GAMES UPDATE EVENT!');
+                console.log(gamesUpdatedEvent);
+
+                const { data } = gamesUpdatedEvent;
+                api.dispatch(setLobbyList(data))
             },
 
             async wsHubMovedToLobbyListener(movedToLobbyEvent) {
@@ -49,7 +53,7 @@ export const createWSMiddleware: Middleware<any, any, Dispatch<AnyAction>> =
             async wsGameWonListener(gameWonEvent: GameEventGameWon): Promise<void> {
                 console.log('Socket - Game Won Event!');
                 console.log(gameWonEvent);
-                const playerName = api.getState().gameInstance.player?.playerName;
+                const playerName = api.getState().gameData.player?.playerName;
                 if (gameWonEvent.data.playerName === playerName)
                     api.dispatch(setPopup('win'))
                 else
@@ -63,7 +67,7 @@ export const createWSMiddleware: Middleware<any, any, Dispatch<AnyAction>> =
             },
         }
 
-        return (next: StoreDispatch) => (action: AllActionsType) => {
+        return (next: StoreDispatch) => (action: StoreActions) => {
             console.log('MIDDLEWARE FIRED!');
             console.log(action.type);
             if (action.type === 'socketMessageSlice/sendSocketCommand') {
@@ -73,7 +77,7 @@ export const createWSMiddleware: Middleware<any, any, Dispatch<AnyAction>> =
             else if (action.type === 'socketMessageSlice/gameSocketConnection') {
                 console.log('ACTION - CONNECT TO THE GAME WEBSOCKET');
 
-                const { gameInstance: { gameId, player } } = api.getState();
+                const { gameData: { gameId, player } } = api.getState();
 
                 // Connect to the WS game namespace with auth
                 gameSocket = io('http://localhost:5000/game',
@@ -96,7 +100,7 @@ export const createWSMiddleware: Middleware<any, any, Dispatch<AnyAction>> =
                 console.log('ACTION - CONNECT TO THE HUB WEBSOCKET');
 
                 // ADD SEPARATE SLICE FOR THE PLAYER?
-                const { gameInstance: { player } } = api.getState();
+                const { gameData: { player } } = api.getState();
 
                 // Connect to the WS game namespace with auth
                 gameSocket = io('http://localhost:5000/hub',

@@ -17,6 +17,9 @@ const socketMessagesSlice = createSlice({
         hubSocketConnection() {
             return 'CONNECT TO THE WS HUB SOCKET';
         },
+        lobbySocketConnection() {
+            return 'CONNECT TO THE WS LOBBY SOCKET';
+        },
         gameSocketConnection() {
             return 'CONNECT TO THE WS GAME SOCKET';
         },
@@ -33,5 +36,5 @@ const socketMessagesSlice = createSlice({
     }
 });
 
-export const { sendSocketCommand, gameSocketConnection, hubSocketConnection } = socketMessagesSlice.actions;
+export const { sendSocketCommand, gameSocketConnection, hubSocketConnection, lobbySocketConnection } = socketMessagesSlice.actions;
 export default socketMessagesSlice;

@@ -1,7 +1,7 @@
 import { AnyAction, Dispatch, Middleware, MiddlewareAPI } from '@reduxjs/toolkit';
 import { ErrorEvent, GameEventNewTurn, GameEventGameWon, GameEventGameDraw } from '@user530/ws_game_shared/interfaces/ws-events';
 import { Socket, io } from 'socket.io-client';
-import { setGameField, setLobbyList, setPopup } from '../reducers/slices/game-data.slice';
+import { setGameField, setLobbyList, setPlayer, setPopup } from '../reducers/slices/game-data.slice';
 import { GameInstanceEventsHandler, GameHubEventsHandler } from '@user530/ws_game_shared/interfaces/ws-listeners';
 import { GameEvent, HubEvent, MessageType } from '@user530/ws_game_shared/types';
 import { RootState, StoreDispatch, StoreActions } from '../ws_game_store';
@@ -16,6 +16,8 @@ export const createWSMiddleware: Middleware<any, any, Dispatch<AnyAction>> =
         const hubEventHandler: GameHubEventsHandler = {
             async wsErrorListener(errEvent: ErrorEvent) {
                 console.log('Socket - Error Event!');
+                const { code, message } = errEvent;
+                console.error(`Error: ${code} ${message}`);
             },
 
             async wsHubGamesUpdatedListener(gamesUpdatedEvent) {
@@ -32,6 +34,9 @@ export const createWSMiddleware: Middleware<any, any, Dispatch<AnyAction>> =
 
             async wsHubQuitHubListener(quitHubEvent) {
                 console.log('Socket - HUB QUIT HUB EVENT!');
+                api.dispatch(setPlayer(null));
+                gameSocket.removeAllListeners();
+                gameSocket.disconnect();
             },
         }
 

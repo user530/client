@@ -38,7 +38,7 @@ export const createWSMiddleware: Middleware<any, any, Dispatch<AnyAction>> =
 
             async wsHubQuitHubListener(quitHubEvent) {
                 console.log('Socket - HUB QUIT HUB EVENT!');
-                api.dispatch(setPlayer(null));
+                api.dispatch(setPlayer({ playerId: null, playerName: null }));
                 socket.removeAllListeners();
                 socket.disconnect();
             },

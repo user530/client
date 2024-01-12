@@ -3,8 +3,8 @@ import { GameTableCol, GameTableRow } from '@user530/ws_game_shared/enums';
 import { GameEventTurnData } from '@user530/ws_game_shared/interfaces/ws-events';
 
 interface PlayerData {
-    playerId: string;
-    playerName: string;
+    playerId: null | string;
+    playerName: null | string;
 }
 
 interface LobbyData {
@@ -14,7 +14,7 @@ interface LobbyData {
 
 interface IGameDataSlice {
     lobbyList: LobbyData[];
-    player: PlayerData | null;
+    player: PlayerData;
     gameId: string | null;
     gameField: {
         -readonly [key in keyof typeof GameTableRow]: {
@@ -39,10 +39,12 @@ const defaultGameField = Object.keys(GameTableRow).reduce(
     }, {} as IGameDataSlice['gameField']
 )
 
+const defaultPlayer: PlayerData = { playerId: null, playerName: null };
+
 const initialState: IGameDataSlice = {
     lobbyList: [],
     gameId: null,
-    player: null,
+    player: defaultPlayer,
     gameField: defaultGameField,
     popupWindow: null,
 }
@@ -57,7 +59,7 @@ const gameDataSlice = createSlice({
         setGame(state, action: PayloadAction<string | null>) {
             state.gameId = action.payload;
         },
-        setPlayer(state, action: PayloadAction<PlayerData | null>) {
+        setPlayer(state, action: PayloadAction<PlayerData>) {
             state.player = action.payload;
         },
         setGameField(state, action: PayloadAction<GameEventTurnData>) {

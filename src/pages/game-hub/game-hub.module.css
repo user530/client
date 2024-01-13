@@ -1,0 +1,20 @@
+.hub-wrapper { 
+    min-width: 600px; 
+    min-height: 350px; 
+    background-color: gray; 
+    padding: 50px;
+}
+
+.hub-list { 
+    min-width: 300px;
+    min-height: 200px; 
+    background-color: white; 
+}
+
+.hub-controls {
+    padding: 10px 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    column-gap: 15px;
+}

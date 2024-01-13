@@ -1,0 +1,8 @@
+.lobby-item {
+    display: flex;
+}
+
+.lobby-item--selected {
+    background-color: lightskyblue;
+    color: white;
+}

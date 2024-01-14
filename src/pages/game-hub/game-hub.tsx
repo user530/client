@@ -53,12 +53,13 @@ export const GameHubPage: React.FC<IGameHubPage> = (props: IGameHubPage) => {
             <div className={styles['hub-list']}>
                 {
                     lobbyList.map(
-                        (lobbyData) =>
+                        ({ gameId, host: { hostName } }) =>
                         (<LobbyItem
-                            key={lobbyData.gameId}
-                            onClick={(e) => lobbyRowClick(lobbyData.gameId)}
-                            isActive={selectedLobbyId === lobbyData.gameId}
-                            {...lobbyData}
+                            key={gameId}
+                            onClick={(e) => lobbyRowClick(gameId)}
+                            isActive={selectedLobbyId === gameId}
+                            gameId={gameId}
+                            hostName={hostName}
                         />))
                 }
             </div>

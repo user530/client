@@ -152,14 +152,14 @@ export const createWSMiddleware: Middleware<any, any, Dispatch<AnyAction>> =
             else if (action.type === 'socketMessageSlice/gameSocketConnection') {
                 console.log('ACTION - CONNECT TO THE GAME WEBSOCKET');
 
-                const { gameData: { gameId, player } } = api.getState();
+                const { gameData: { player: { playerId }, game } } = api.getState();
 
                 // Connect to the WS game namespace with auth
                 socket = io('http://localhost:5000/game',
                     {
                         auth: {
-                            userId: player?.playerId,
-                            gameId: gameId
+                            userId: playerId,
+                            gameId: game?.gameId,
                         }
                     });
 

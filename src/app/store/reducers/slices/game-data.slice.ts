@@ -1,21 +1,31 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { GameTableCol, GameTableRow } from '@user530/ws_game_shared/enums';
-import { GameEventTurnData } from '@user530/ws_game_shared/interfaces/ws-events';
+import { GameStatus, GameTableCol, GameTableRow } from '@user530/ws_game_shared/enums';
+import { HubEventGameData, GameEventTurnData } from '@user530/ws_game_shared/interfaces/ws-events';
 
 interface PlayerData {
     playerId: null | string;
     playerName: null | string;
 }
 
-interface LobbyData {
+interface LobbyData extends HubEventGameData { };
+
+interface GameData {
     gameId: string;
-    hostName: string;
+    host: {
+        hostId: string;
+        hostName: string;
+    };
+    guest: null | {
+        guestId: string;
+        guestName: string;
+    };
+    status: GameStatus;
 }
 
 interface IGameDataSlice {
-    lobbyList: LobbyData[];
+    lobbyList: HubEventGameData[];
     player: PlayerData;
-    gameId: string | null;
+    game: GameData | null;
     gameField: {
         -readonly [key in keyof typeof GameTableRow]: {
             -readonly [key in keyof typeof GameTableCol]: string | null;
@@ -43,8 +53,8 @@ const defaultPlayer: PlayerData = { playerId: null, playerName: null };
 
 const initialState: IGameDataSlice = {
     lobbyList: [],
-    gameId: null,
     player: defaultPlayer,
+    game: null,
     gameField: defaultGameField,
     popupWindow: null,
 }
@@ -53,11 +63,11 @@ const gameDataSlice = createSlice({
     name: 'gameDataSlice',
     initialState,
     reducers: {
-        setLobbyList(state, action: PayloadAction<LobbyData[]>) {
+        setLobbyList(state, action: PayloadAction<HubEventGameData[]>) {
             state.lobbyList = action.payload;
         },
-        setGame(state, action: PayloadAction<string | null>) {
-            state.gameId = action.payload;
+        setGame(state, action: PayloadAction<GameData | null>) {
+            state.game = action.payload;
         },
         setPlayer(state, action: PayloadAction<PlayerData>) {
             state.player = action.payload;

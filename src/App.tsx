@@ -5,6 +5,7 @@ import { useAppSelector } from './app/hooks/useStore';
 import { TestLoginPage } from './pages/test-login';
 import { GameHubPage } from './pages/game-hub/game-hub';
 import { GameStatus } from '@user530/ws_game_shared/enums';
+import { GameLobbyPage } from './pages/game-lobby/game-lobby';
 
 function App() {
   const playerId = useAppSelector((state) => state.gameData.player?.playerId);
@@ -15,9 +16,11 @@ function App() {
       {
         playerId && game && game.status === GameStatus.InProgress
           ? <GameInstancePage />
-          : playerId
-            ? <GameHubPage />
-            : <TestLoginPage />
+          : playerId && game
+            ? <GameLobbyPage />
+            : playerId
+              ? <GameHubPage />
+              : <TestLoginPage />
       }
 
     </div>

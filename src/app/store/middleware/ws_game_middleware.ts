@@ -1,7 +1,7 @@
 import { AnyAction, Dispatch, Middleware, MiddlewareAPI } from '@reduxjs/toolkit';
 import { ErrorEvent, GameEventNewTurn, GameEventGameWon, GameEventGameDraw } from '@user530/ws_game_shared/interfaces/ws-events';
 import { Socket, io } from 'socket.io-client';
-import { setGameField, setLobbyList, setPlayer, setPopup } from '../reducers/slices/game-data.slice';
+import { setGame, setGameField, setLobbyList, setPlayer, setPopup } from '../reducers/slices/game-data.slice';
 import { lobbySocketConnection } from '../reducers/slices/socket-messages.slice';
 import { GameInstanceEventsHandler, GameHubEventsHandler, GameLobbyEventsHandler } from '@user530/ws_game_shared/interfaces/ws-listeners';
 import { GameEvent, HubEvent, LobbyEvent, MessageType } from '@user530/ws_game_shared/types';
@@ -33,6 +33,8 @@ export const createWSMiddleware: Middleware<any, any, Dispatch<AnyAction>> =
                 console.log('Socket - HUB MOVED TO LOBBY EVENT!');
                 console.log(movedToLobbyEvent);
 
+                const { data } = movedToLobbyEvent;
+                api.dispatch(setGame(data));
                 api.dispatch(lobbySocketConnection());
             },
 
@@ -131,6 +133,7 @@ export const createWSMiddleware: Middleware<any, any, Dispatch<AnyAction>> =
 
                 // ADD SEPARATE SLICE FOR THE PLAYER?
                 const { gameData: { player } } = api.getState();
+                console.log(api.getState().gameData.game);
 
                 // Connect to the WS lobby namespace with auth
                 socket = io('http://localhost:5000/lobby',

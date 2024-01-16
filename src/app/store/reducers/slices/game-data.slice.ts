@@ -1,13 +1,11 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { GameStatus, GameTableCol, GameTableRow } from '@user530/ws_game_shared/enums';
-import { HubEventGameData, GameEventTurnData } from '@user530/ws_game_shared/interfaces/ws-events';
+import { HubEventGameData, GameEventTurnData, } from '@user530/ws_game_shared/interfaces/ws-events';
 
 interface PlayerData {
     playerId: null | string;
     playerName: null | string;
 }
-
-interface LobbyData extends HubEventGameData { };
 
 interface GameData {
     gameId: string;

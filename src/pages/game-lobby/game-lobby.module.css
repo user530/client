@@ -1,19 +1,30 @@
 .lobby-wrapper {
-
+    width: 40%;
+    margin: 0 auto;
+    font-size: 18px;
+    line-height: 1;
 }
 
 .lobby-header {
-    
+
 }
 
 .lobby-body {
-    
+    width: 50%;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+}
+
+.big-text {
+    font-size: 72px;
 }
 
 .column {
-    
+
 }
 
 .lobby-controls {
-    
+    display: flex;
+    justify-content: space-between;
 }

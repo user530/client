@@ -1,5 +1,6 @@
 import React from 'react';
 import styles from './game-lobby.module.css';
+import { useAppSelector } from '../../app/hooks/useStore';
 
 interface IGameLobbyPage {
 
@@ -7,7 +8,13 @@ interface IGameLobbyPage {
 
 export const GameLobbyPage: React.FC<IGameLobbyPage> = (props: IGameLobbyPage) => {
 
-    const [playerRole, setPlayerRole] = React.useState<'host' | 'guest'>('host');
+    const playerId = useAppSelector((state) => state.gameData.player.playerId)!;
+    const { gameId, guest, host } = useAppSelector((state) => state.gameData.game)!;
+
+    const [playerRole, setPlayerRole] = React.useState<'host' | 'guest'>(
+        playerId === host.hostId
+            ? 'host'
+            : 'guest');
 
     const handleLeaveLobbyClick = () => {
         console.log('Handle Leave Lobby Click');
@@ -25,16 +32,16 @@ export const GameLobbyPage: React.FC<IGameLobbyPage> = (props: IGameLobbyPage) =
         <>
             <div className={styles["lobby-wrapper"]}>
                 <div className={styles["lobby-header"]}>
-                    <h3>GAME ID</h3>
+                    <h3>Game#: {gameId}</h3>
                 </div>
                 <div className={styles["lobby-body"]}>
                     <div className={styles["column"]}>
-                        <p>Host name</p>
-                        <p>X</p>
+                        <p>{host.hostName}</p>
+                        <p className={styles['big-text']}>X</p>
                     </div>
                     <div className={styles["column"]}>
-                        <p>Guest name</p>
-                        <p>O</p>
+                        <p>{guest ? guest.guestName : '...'}</p>
+                        <p className={styles['big-text']}>O</p>
                     </div>
                 </div>
                 <div className={styles["lobby-controls"]}>

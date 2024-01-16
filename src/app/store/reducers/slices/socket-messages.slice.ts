@@ -3,6 +3,9 @@ import {
     HubCommandHostGame,
     HubCommandJoinGame,
     HubCommandLeaveHub,
+    LobbyCommandLeaveLobby,
+    LobbyCommandKickGuest,
+    LobbyCommandStartGame,
     GameCommandForfeit,
     GameCommandMakeTurn,
 } from '@user530/ws_game_shared/interfaces/ws-messages';
@@ -27,6 +30,9 @@ const socketMessagesSlice = createSlice({
             | HubCommandHostGame
             | HubCommandJoinGame
             | HubCommandLeaveHub
+            | LobbyCommandLeaveLobby
+            | LobbyCommandKickGuest
+            | LobbyCommandStartGame
             | GameCommandMakeTurn
             | GameCommandForfeit
         >) {

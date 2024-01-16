@@ -1,6 +1,8 @@
 import React from 'react';
 import styles from './game-lobby.module.css';
-import { useAppSelector } from '../../app/hooks/useStore';
+import { useAppDispatch, useAppSelector } from '../../app/hooks/useStore';
+import { sendSocketCommand } from '../../app/store/reducers/slices/socket-messages.slice';
+import { createLobbyKickMessage, createLobbyLeaveMessage, createLobbyStartMessage } from '@user530/ws_game_shared/creators/messages';
 
 interface IGameLobbyPage {
 
@@ -10,22 +12,33 @@ export const GameLobbyPage: React.FC<IGameLobbyPage> = (props: IGameLobbyPage) =
 
     const playerId = useAppSelector((state) => state.gameData.player.playerId)!;
     const { gameId, guest, host } = useAppSelector((state) => state.gameData.game)!;
+    const dispatch = useAppDispatch();
 
-    const [playerRole, setPlayerRole] = React.useState<'host' | 'guest'>(
+    const [playerRole] = React.useState<'host' | 'guest'>(
         playerId === host.hostId
             ? 'host'
             : 'guest');
 
     const handleLeaveLobbyClick = () => {
         console.log('Handle Leave Lobby Click');
+
+        dispatch(sendSocketCommand(createLobbyLeaveMessage({ playerId, gameId })))
     };
 
     const handleKickGuestClick = () => {
         console.log('Handle Kick Guest Click');
+
+        if (playerRole === 'guest' || !guest) return;
+
+        dispatch(sendSocketCommand(createLobbyKickMessage({ gameId, playerId: guest.guestId })));
     };
 
     const handleStartGameClick = () => {
         console.log('Handle Start Game Click');
+
+        if (playerRole === 'guest' || !guest) return;
+
+        dispatch(sendSocketCommand(createLobbyStartMessage({ gameId, playerId: host.hostId })));
     };
 
     return (

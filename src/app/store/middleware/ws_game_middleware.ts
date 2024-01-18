@@ -55,6 +55,12 @@ export const createWSMiddleware: Middleware<any, any, Dispatch<AnyAction>> =
             async wsLobbyGuestJoinedListener(guestJoinedEvent) {
                 console.log('Socket - LOBBY GUEST JOINED EVENT!');
                 console.log(guestJoinedEvent);
+                const guest = guestJoinedEvent.data;
+                const gameData = api.getState().gameData.game;
+
+                if (!gameData || gameData.guest) return;
+
+                api.dispatch(setGame({ ...gameData, guest }))
             },
             async wsLobbyGuestLeftListener(guestLeftEvent) {
                 console.log('Socket - LOBBY GUEST LEFT EVENT!');
@@ -132,7 +138,7 @@ export const createWSMiddleware: Middleware<any, any, Dispatch<AnyAction>> =
                 console.log('ACTION - CONNECT TO THE LOBBY WEBSOCKET');
 
                 // ADD SEPARATE SLICE FOR THE PLAYER?
-                const { gameData: { player } } = api.getState();
+                const { gameData: { player, game } } = api.getState();
                 console.log(api.getState().gameData.game);
 
                 // Connect to the WS lobby namespace with auth
@@ -140,6 +146,7 @@ export const createWSMiddleware: Middleware<any, any, Dispatch<AnyAction>> =
                     {
                         auth: {
                             userId: player?.playerId,
+                            gameId: game?.gameId,
                         }
                     });
 

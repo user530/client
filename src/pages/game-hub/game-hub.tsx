@@ -11,7 +11,7 @@ interface IGameHubPage {
 
 export const GameHubPage: React.FC<IGameHubPage> = (props: IGameHubPage) => {
     const dispatch = useAppDispatch();
-    const playerId = useAppSelector((state) => state.gameData.player.playerId)
+    const playerId = useAppSelector((state) => state.gameData.player!.playerId)
     const lobbyList = useAppSelector((state) => state.gameData.lobbyList);
     const [selectedLobbyId, setSelectedLobbyId] = React.useState<null | string>(null);
 
@@ -33,7 +33,7 @@ export const GameHubPage: React.FC<IGameHubPage> = (props: IGameHubPage) => {
     const handleJoinGameClick = () => {
         if (!playerId || !selectedLobbyId) return;
 
-        dispatch(sendSocketCommand(createHubJoinMessage({ playerId, lobbyId: selectedLobbyId })));
+        dispatch(sendSocketCommand(createHubJoinMessage({ playerId, gameId: selectedLobbyId })));
     };
 
     // Clear up selected lobby id if selected game is not open anymore

@@ -10,7 +10,7 @@ interface IGameLobbyPage {
 
 export const GameLobbyPage: React.FC<IGameLobbyPage> = (props: IGameLobbyPage) => {
 
-    const playerId = useAppSelector((state) => state.gameData.player.playerId)!;
+    const playerId = useAppSelector((state) => state.gameData.player!.playerId)!;
     const { gameId, guest, host } = useAppSelector((state) => state.gameData.game)!;
     const dispatch = useAppDispatch();
 

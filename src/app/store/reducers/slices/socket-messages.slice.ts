@@ -17,6 +17,11 @@ const socketMessagesSlice = createSlice({
     name: 'socketMessageSlice',
     initialState,
     reducers: {
+        handleFailedAuth() {
+            console.log('FAILED SOCKET AUTHENTICATION!');
+            // ERROR LOGIC PLACEHOLDER
+            throw new Error('FAILED SOCKET AUTHENTICATION!');
+        },
         hubSocketConnection() {
             return 'CONNECT TO THE WS HUB SOCKET';
         },
@@ -42,5 +47,5 @@ const socketMessagesSlice = createSlice({
     }
 });
 
-export const { sendSocketCommand, gameSocketConnection, hubSocketConnection, lobbySocketConnection } = socketMessagesSlice.actions;
+export const { sendSocketCommand, gameSocketConnection, hubSocketConnection, lobbySocketConnection, handleFailedAuth } = socketMessagesSlice.actions;
 export default socketMessagesSlice;

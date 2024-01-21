@@ -1,29 +1,11 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { GameStatus, GameTableCol, GameTableRow } from '@user530/ws_game_shared/enums';
-import { HubEventGameData, GameEventTurnData, } from '@user530/ws_game_shared/interfaces/ws-events';
-
-interface PlayerData {
-    playerId: null | string;
-    playerName: null | string;
-}
-
-interface GameData {
-    gameId: string;
-    host: {
-        hostId: string;
-        hostName: string;
-    };
-    guest: null | {
-        guestId: string;
-        guestName: string;
-    };
-    status: GameStatus;
-}
+import { GameTableCol, GameTableRow } from '@user530/ws_game_shared/enums';
+import { StorePlayerData, StoreGameData, OpenLobbyStateData, LobbyStateData, TurnData } from '@user530/ws_game_shared/interfaces/general';
 
 interface IGameDataSlice {
-    lobbyList: HubEventGameData[];
-    player: PlayerData;
-    game: GameData | null;
+    lobbyList: OpenLobbyStateData[];
+    player: null | StorePlayerData;
+    game: null | StoreGameData;
     gameField: {
         -readonly [key in keyof typeof GameTableRow]: {
             -readonly [key in keyof typeof GameTableCol]: string | null;
@@ -47,11 +29,9 @@ const defaultGameField = Object.keys(GameTableRow).reduce(
     }, {} as IGameDataSlice['gameField']
 )
 
-const defaultPlayer: PlayerData = { playerId: null, playerName: null };
-
 const initialState: IGameDataSlice = {
     lobbyList: [],
-    player: defaultPlayer,
+    player: null,
     game: null,
     gameField: defaultGameField,
     popupWindow: null,
@@ -61,16 +41,20 @@ const gameDataSlice = createSlice({
     name: 'gameDataSlice',
     initialState,
     reducers: {
-        setLobbyList(state, action: PayloadAction<HubEventGameData[]>) {
+        setLobbyList(state, action: PayloadAction<OpenLobbyStateData[]>) {
             state.lobbyList = action.payload;
         },
-        setGame(state, action: PayloadAction<GameData | null>) {
+        setLobby(state, action: PayloadAction<null | LobbyStateData>) {
+            // If payload is not null, add empty turns to the lobby data
+            state.game = action.payload ? { ...action.payload, turns: [] } : action.payload;
+        },
+        setGame(state, action: PayloadAction<null | StoreGameData>) {
             state.game = action.payload;
         },
-        setPlayer(state, action: PayloadAction<PlayerData>) {
+        setPlayer(state, action: PayloadAction<null | StorePlayerData>) {
             state.player = action.payload;
         },
-        setGameField(state, action: PayloadAction<GameEventTurnData>) {
+        setGameField(state, action: PayloadAction<TurnData>) {
             const { row, column: col, mark } = action.payload;
 
             state.gameField[row][col] = mark;
@@ -81,5 +65,5 @@ const gameDataSlice = createSlice({
     }
 })
 
-export const { setGame, setPlayer, setGameField, setPopup, setLobbyList } = gameDataSlice.actions;
+export const { setGame, setLobby, setPlayer, setGameField, setPopup, setLobbyList } = gameDataSlice.actions;
 export default gameDataSlice;

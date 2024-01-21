@@ -1,8 +1,8 @@
 import { AnyAction, Dispatch, Middleware, MiddlewareAPI } from '@reduxjs/toolkit';
 import { ErrorEvent, GameEventNewTurn, GameEventGameWon, GameEventGameDraw } from '@user530/ws_game_shared/interfaces/ws-events';
 import { Socket, io } from 'socket.io-client';
-import { setGame, setGameField, setLobbyList, setPlayer, setPopup } from '../reducers/slices/game-data.slice';
-import { lobbySocketConnection } from '../reducers/slices/socket-messages.slice';
+import { setGame, setGameField, setLobby, setLobbyList, setPlayer, setPopup } from '../reducers/slices/game-data.slice';
+import { gameSocketConnection, handleFailedAuth, lobbySocketConnection } from '../reducers/slices/socket-messages.slice';
 import { GameInstanceEventsHandler, GameHubEventsHandler, GameLobbyEventsHandler } from '@user530/ws_game_shared/interfaces/ws-listeners';
 import { GameEvent, HubEvent, LobbyEvent, MessageType } from '@user530/ws_game_shared/types';
 import { RootState, StoreDispatch, StoreActions } from '../ws_game_store';
@@ -34,13 +34,20 @@ export const createWSMiddleware: Middleware<any, any, Dispatch<AnyAction>> =
                 console.log(movedToLobbyEvent);
 
                 const { data } = movedToLobbyEvent;
-                api.dispatch(setGame(data));
+                api.dispatch(setLobby(data));
                 api.dispatch(lobbySocketConnection());
+            },
+
+            async wsHubMovedToGameListener(movedToGameEvent) {
+                console.log('Socket - HUB MOVED TO GAME EVENT!');
+                const { data } = movedToGameEvent;
+                api.dispatch(setGame(data));
+                api.dispatch(gameSocketConnection());
             },
 
             async wsHubQuitHubListener(quitHubEvent) {
                 console.log('Socket - HUB QUIT HUB EVENT!');
-                api.dispatch(setPlayer({ playerId: null, playerName: null }));
+                api.dispatch(setPlayer(null));
                 socket.removeAllListeners();
                 socket.disconnect();
             },
@@ -162,14 +169,18 @@ export const createWSMiddleware: Middleware<any, any, Dispatch<AnyAction>> =
             else if (action.type === 'socketMessageSlice/gameSocketConnection') {
                 console.log('ACTION - CONNECT TO THE GAME WEBSOCKET');
 
-                const { gameData: { player: { playerId }, game } } = api.getState();
+                const { gameData: { player, game } } = api.getState();
+
+                // If there is no player data -> return
+                if (!player || !game)
+                    return api.dispatch(handleFailedAuth());
 
                 // Connect to the WS game namespace with auth
                 socket = io('http://localhost:5000/game',
                     {
                         auth: {
-                            userId: playerId,
-                            gameId: game?.gameId,
+                            userId: player.playerId,
+                            gameId: game.gameId,
                         }
                     });
 

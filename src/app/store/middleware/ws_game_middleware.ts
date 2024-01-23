@@ -162,7 +162,7 @@ export const createWSMiddleware: Middleware<any, any, Dispatch<AnyAction>> =
                 // Set up lobby listeners
                 socket.on(MessageType.ErrorMessage, lobbyEventHandler.wsErrorListener);
                 socket.on(LobbyEvent.GuestJoined, lobbyEventHandler.wsLobbyGuestJoinedListener);
-                socket.on(LobbyEvent.GuestLeft, lobbyEventHandler.wsLobbyGuestJoinedListener);
+                socket.on(LobbyEvent.GuestLeft, lobbyEventHandler.wsLobbyGuestLeftListener);
                 socket.on(LobbyEvent.MovedToGame, lobbyEventHandler.wsLobbyToGameListener);
                 socket.on(LobbyEvent.MovedToHub, lobbyEventHandler.wsLobbyToHubListener);
             }

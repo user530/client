@@ -4,6 +4,7 @@ import { ForfeitGameBtn } from '../components/forfeit-btn/forfeit-game-btn';
 import { useAppDispatch, useAppSelector } from '../app/hooks/useStore';
 import { PopUpWindow } from '../components/pop-up-windows/pop-up-window';
 import { setGame } from '../app/store/reducers/slices/game-data.slice';
+import { hubSocketConnection } from '../app/store/reducers/slices/socket-messages.slice';
 
 interface IGameInstancePage {
 }
@@ -17,6 +18,7 @@ export const GameInstancePage: React.FC<IGameInstancePage> = (props: IGameInstan
     const closeConnection = () => {
         console.log('CLOSE WS CONNECTION'); //PLACEHOLDER
         dispatch(setGame(null));
+        dispatch(hubSocketConnection());
     }
 
     return <>

@@ -30,7 +30,7 @@ export const GameLobbyPage: React.FC<IGameLobbyPage> = (props: IGameLobbyPage) =
         console.log(playerRole)
         console.log(guest)
         if (playerRole === 'guest' || !guest) return;
-        dispatch(sendSocketCommand(createLobbyKickMessage({ gameId, playerId: guest.guestId })));
+        dispatch(sendSocketCommand(createLobbyKickMessage({ gameId, playerId })));
     };
 
     const handleStartGameClick = () => {

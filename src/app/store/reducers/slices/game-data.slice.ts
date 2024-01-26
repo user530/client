@@ -54,10 +54,14 @@ const gameDataSlice = createSlice({
         setPlayer(state, action: PayloadAction<null | StorePlayerData>) {
             state.player = action.payload;
         },
-        setGameField(state, action: PayloadAction<TurnData>) {
-            const { row, column: col, mark } = action.payload;
+        setGameField(state, action: PayloadAction<null | TurnData>) {
+            if (action.payload === null)
+                state.gameField = defaultGameField;
+            else {
+                const { row, column: col, mark } = action.payload;
 
-            state.gameField[row][col] = mark;
+                state.gameField[row][col] = mark;
+            }
         },
         setPopup(state, action: PayloadAction<'win' | 'loose' | 'draw' | null>) {
             state.popupWindow = action.payload;

@@ -127,12 +127,16 @@ export const createWSMiddleware: Middleware<any, any, Dispatch<AnyAction>> =
                     api.dispatch(setPopup('win'))
                 else
                     api.dispatch(setPopup('loose'))
+                // Clear the gameField store
+                api.dispatch(setGameField(null));
             },
 
             async wsGameDrawListener(gameDrawEvent: GameEventGameDraw): Promise<void> {
                 console.log('Socket - Game Draw Event!');
                 console.log(gameDrawEvent);
                 api.dispatch(setPopup('draw'))
+                // Clear the gameField store
+                api.dispatch(setGameField(null));
             },
         }
 

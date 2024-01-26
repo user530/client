@@ -1,10 +1,11 @@
 import React from 'react';
-import { GameField } from '../components/game-field/game-field';
-import { ForfeitGameBtn } from '../components/forfeit-btn/forfeit-game-btn';
-import { useAppDispatch, useAppSelector } from '../app/hooks/useStore';
-import { PopUpWindow } from '../components/pop-up-windows/pop-up-window';
-import { setGame } from '../app/store/reducers/slices/game-data.slice';
-import { hubSocketConnection } from '../app/store/reducers/slices/socket-messages.slice';
+import styles from './game-instance.module.css';
+import { GameField } from '../../components/game-field/game-field';
+import { ForfeitGameBtn } from '../../components/forfeit-btn/forfeit-game-btn';
+import { useAppDispatch, useAppSelector } from '../../app/hooks/useStore';
+import { PopUpWindow } from '../../components/pop-up-windows/pop-up-window';
+import { setGame } from '../../app/store/reducers/slices/game-data.slice';
+import { hubSocketConnection } from '../../app/store/reducers/slices/socket-messages.slice';
 
 interface IGameInstancePage {
 }

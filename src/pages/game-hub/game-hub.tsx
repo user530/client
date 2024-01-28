@@ -49,7 +49,57 @@ export const GameHubPage: React.FC<IGameHubPage> = (props: IGameHubPage) => {
     )
 
     return <>
-        <div className={styles['hub-wrapper']}>
+        <div className={styles['page-wrapper']}>
+            <div className={styles['page-heading']}>
+                <h2>Tic-Tac-Toe Game App</h2>
+                <input type="button" value="Leave Hub" />
+            </div>
+            <div className={styles['page-body']}>
+                <div className={styles['chat-wrapper']}>
+                    <div className={styles['chat-heading']}>
+                        <h3>General Chat:</h3>
+                    </div>
+                    <div className={styles['chat-main']}>
+                        <div className={styles['chat-msg']}>
+                            <p>[11:11:11]</p>
+                            <p>[User1]</p>
+                            <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Iste repudiandae beatae animi illum, tempore possimus ab in suscipit quas minima, sapiente provident aperiam odio doloremque libero maxime facilis ad obcaecati?</p>
+                        </div>
+                        <div className={styles['chat-msg']}>
+                            <p>[11:11:11]</p>
+                            <p>[User1]</p>
+                            <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Iste repudiandae beatae animi illum, tempore possimus ab in suscipit quas minima, sapiente provident aperiam odio doloremque libero maxime facilis ad obcaecati?</p>
+                        </div>
+                        <div className={styles['chat-msg']}>
+                            <p>[11:11:11]</p>
+                            <p>[User1]</p>
+                            <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Iste repudiandae beatae animi illum, tempore possimus ab in suscipit quas minima, sapiente provident aperiam odio doloremque libero maxime facilis ad obcaecati?</p>
+                        </div>
+                    </div>
+                    <div className={styles['chat-controls']}>
+                        <input type="text" />
+                        <input type="button" value="Send" />
+                    </div>
+                </div>
+                <div className={styles['hub-wrapper']}>
+                    <div className={styles['hub-heading']}>
+                        <h3>Open lobbies:</h3>
+                    </div>
+                    <div className={styles['hub-main']}>
+                        <div className={styles['lobby-item']}>
+                            <p>№</p>
+                            <p>Host name</p>
+                        </div>
+                    </div>
+                    <div className={styles['hub-controls']}>
+                        <input type="text" value="Host game" />
+                        <input type="text" value="Join game" />
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        {/* <div className={styles['hub-wrapper']}>
             <div className={styles['hub-list']}>
                 {
                     lobbyList.map(
@@ -69,6 +119,6 @@ export const GameHubPage: React.FC<IGameHubPage> = (props: IGameHubPage) => {
                 <button onClick={handleHostGameClick}>Host</button>
                 <button onClick={handleJoinGameClick}>Join</button>
             </div>
-        </div>
+        </div> */}
     </>
 };

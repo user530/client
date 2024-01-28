@@ -1,4 +1,38 @@
-.hub-wrapper { 
+.page-wrapper{
+    border: 1px solid red;
+}
+.page-heading{
+    border: 1px solid blue;
+    display: flex;
+    justify-content: space-between;
+}
+
+.page-body{
+    display: flex;
+}
+
+.chat-wrapper{
+    width: 70%;
+}
+.chat-heading{}
+.chat-main{}
+.chat-msg{
+    display: flex;
+}
+.chat-controls{
+    border: 1px solid purple;
+}
+
+.hub-wrapper{
+    width: 30%;
+}
+.hub-heading{}
+.hub-main{}
+.hub-controls{}
+
+
+
+/* .hub-wrapper { 
     min-width: 600px; 
     min-height: 350px; 
     background-color: gray; 
@@ -17,4 +51,4 @@
     justify-content: center;
     align-items: center;
     column-gap: 15px;
-}
+} */

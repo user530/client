@@ -1,8 +1,24 @@
-.lobby-item {
+.item {
+    padding: 15px;
+    margin-inline: 15px;
     display: flex;
+    column-gap: 20px;
+    cursor: pointer;
+    transition: 0.3s;
+    border-bottom: 1px solid #dedede;
+    user-select: none;
 }
 
-.lobby-item--selected {
+.item:hover {
+    background-color:  rgba(135, 206, 250, 0.5);
+}
+
+.item--selected{
+    background-color: lightskyblue;
+    color: white;
+}
+
+.item--selected:hover{
     background-color: lightskyblue;
     color: white;
 }

@@ -16,8 +16,8 @@ export const LobbyItem: React.FC<ILobbyItem> = (props: ILobbyItem) => {
         onClick={onClick}
         className={
             (className ? className : '') +
-            styles['lobby-item'] +
-            (isActive ? ` ${styles['lobby-item--selected']}` : '')
+            styles['item'] +
+            (isActive ? ` ${styles['item--selected']}` : '')
         }
     >
         <p>{gameId}</p>

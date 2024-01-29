@@ -51,49 +51,57 @@ export const GameHubPage: React.FC<IGameHubPage> = (props: IGameHubPage) => {
     return <>
         <div className={styles['page-wrapper']}>
             <div className={styles['page-heading']}>
-                <h2>Tic-Tac-Toe Game App</h2>
-                <input type="button" value="Leave Hub" />
+                <h1 className={styles['h1']}>Tic-Tac-Toe Game App</h1>
+                <input onClick={handleQuitHubClick} type="button" value="+" />
             </div>
             <div className={styles['page-body']}>
                 <div className={styles['chat-wrapper']}>
                     <div className={styles['chat-heading']}>
-                        <h3>General Chat:</h3>
+                        <h2 className={styles['h2']}>General Chat:</h2>
                     </div>
                     <div className={styles['chat-main']}>
                         <div className={styles['chat-msg']}>
-                            <p>[11:11:11]</p>
-                            <p>[User1]</p>
-                            <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Iste repudiandae beatae animi illum, tempore possimus ab in suscipit quas minima, sapiente provident aperiam odio doloremque libero maxime facilis ad obcaecati?</p>
+                            <span className={styles['chat-msg__timestamp']}>[11:11]</span>
+                            <p className={styles['chat-msg__user']}>[User1]</p>
+                            <p className={styles['chat-msg__text']}>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Iste repudiandae beatae animi illum, tempore possimus ab in suscipit quas minima, sapiente provident aperiam odio doloremque libero maxime facilis ad obcaecati?</p>
                         </div>
                         <div className={styles['chat-msg']}>
-                            <p>[11:11:11]</p>
-                            <p>[User1]</p>
-                            <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Iste repudiandae beatae animi illum, tempore possimus ab in suscipit quas minima, sapiente provident aperiam odio doloremque libero maxime facilis ad obcaecati?</p>
+                            <span className={styles['chat-msg__timestamp']}>[11:11]</span>
+                            <p className={styles['chat-msg__user']}>[User1]</p>
+                            <p className={styles['chat-msg__text']}>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Iste repudiandae beatae animi illum, tempore possimus ab in suscipit quas minima, sapiente provident aperiam odio doloremque libero maxime facilis ad obcaecati?</p>
                         </div>
                         <div className={styles['chat-msg']}>
-                            <p>[11:11:11]</p>
-                            <p>[User1]</p>
-                            <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Iste repudiandae beatae animi illum, tempore possimus ab in suscipit quas minima, sapiente provident aperiam odio doloremque libero maxime facilis ad obcaecati?</p>
+                            <span className={styles['chat-msg__timestamp']}>[11:11]</span>
+                            <p className={styles['chat-msg__user']}>[User1]</p>
+                            <p className={styles['chat-msg__text']}>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Iste repudiandae beatae animi illum, tempore possimus ab in suscipit quas minima, sapiente provident aperiam odio doloremque libero maxime facilis ad obcaecati?</p>
                         </div>
+
                     </div>
                     <div className={styles['chat-controls']}>
-                        <input type="text" />
-                        <input type="button" value="Send" />
+                        <textarea className={styles['chat-controls__textarea']}></textarea>
+                        <input className={styles['chat-controls__btn']} type="button" value="Send" />
                     </div>
                 </div>
                 <div className={styles['hub-wrapper']}>
                     <div className={styles['hub-heading']}>
-                        <h3>Open lobbies:</h3>
+                        <h2 className={styles['h2']}>Open lobbies:</h2>
                     </div>
                     <div className={styles['hub-main']}>
-                        <div className={styles['lobby-item']}>
-                            <p>№</p>
-                            <p>Host name</p>
-                        </div>
+                        {
+                            lobbyList.map(
+                                ({ gameId, host: { hostName } }) =>
+                                (<LobbyItem
+                                    key={gameId}
+                                    onClick={(e) => lobbyRowClick(gameId)}
+                                    isActive={selectedLobbyId === gameId}
+                                    gameId={gameId}
+                                    hostName={hostName}
+                                />))
+                        }
                     </div>
                     <div className={styles['hub-controls']}>
-                        <input type="text" value="Host game" />
-                        <input type="text" value="Join game" />
+                        <input onClick={handleHostGameClick} type="button" value="Host game" />
+                        <input onClick={handleJoinGameClick} type="button" value="Join game" />
                     </div>
                 </div>
             </div>

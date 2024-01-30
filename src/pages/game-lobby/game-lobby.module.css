@@ -1,5 +1,33 @@
+:root{
+    --darkBlue: #173F5F;
+    --lightBlue: #20639b;
+    --cyan: #3CAEA3;
+    --gold: #F6D55C;
+    --orangeLight: #ed553b;
+    --orangeDark: #ee3615;
+    --whitish: #F5F5F5;
+}
+
+.page-wrapper{
+    background-color: var(--darkBlue);
+    height: 100vh;
+    display: flex;
+}
+
+.page-main{
+    display: flex;
+    margin: auto;
+    width: 60%;
+    height: 40%;
+    border: 1px solid black;
+    background-color: #fff;
+}
+
+.lobby-wrapper, .chat-wrapper {
+    flex-direction: column;
+}
+
 .lobby-wrapper {
-    width: 40%;
     margin: 0 auto;
     font-size: 18px;
     line-height: 1;
@@ -28,3 +56,9 @@
     display: flex;
     justify-content: space-between;
 }
+
+
+.chat-heading{}
+.chat-main{}
+.chat-msg{}
+.chat-controls{}

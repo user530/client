@@ -44,33 +44,66 @@ export const GameLobbyPage: React.FC<IGameLobbyPage> = (props: IGameLobbyPage) =
 
     return (
         <>
-            <div className={styles["lobby-wrapper"]}>
-                <div className={styles["lobby-header"]}>
-                    <h3>Game#: {gameId}</h3>
-                </div>
-                <div className={styles["lobby-body"]}>
-                    <div className={styles["column"]}>
-                        <p>{host.hostName}</p>
-                        <p className={styles['big-text']}>X</p>
-                    </div>
-                    <div className={styles["column"]}>
-                        <p>{guest ? guest.guestName : '...'}</p>
-                        <p className={styles['big-text']}>O</p>
-                    </div>
-                </div>
-                <div className={styles["lobby-controls"]}>
-                    <button onClick={handleLeaveLobbyClick}>Leave</button>
+            <div className={styles['page-wrapper']}>
+                <div className={styles['page-main']}>
+                    <div className={styles['lobby-wrapper']}>
+                        <div className={styles['lobby-header']}>
+                            <h3>Game#: {gameId}</h3>
+                        </div>
+                        <div className={styles['lobby-body']}>
+                            <div className={styles['column']}>
+                                <p>{host.hostName}</p>
+                                <p className={styles['big-text']}>X</p>
+                            </div>
+                            <div className={styles['column']}>
+                                <p>{guest ? guest.guestName : '...'}</p>
+                                <p className={styles['big-text']}>O</p>
+                            </div>
+                        </div>
+                        <div className={styles['lobby-controls']}>
+                            <button onClick={handleLeaveLobbyClick}>Leave</button>
 
-                    {
-                        playerRole === 'host'
-                            ? <>
-                                <button onClick={handleKickGuestClick}>Kick</button>
-                                <button onClick={handleStartGameClick}>Start</button>
-                            </>
-                            : null
-                    }
+                            {
+                                playerRole === 'host'
+                                    ? <>
+                                        <button onClick={handleKickGuestClick}>Kick</button>
+                                        <button onClick={handleStartGameClick}>Start</button>
+                                    </>
+                                    : null
+                            }
 
+                        </div>
+                    </div>
+                    <div className={styles['chat-wrapper']}>
+                        <div className={styles['chat-heading']}>
+                            <h2 className={styles['h2']}>Lobby Chat:</h2>
+                        </div>
+                        <div className={styles['chat-main']}>
+                            <div className={styles['chat-msg']}>
+                                <span className={styles['chat-msg__timestamp']}>[11:11]</span>
+                                <p className={styles['chat-msg__user']}>[User1]</p>
+                                <p className={styles['chat-msg__text']}>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Iste repudiandae beatae animi illum, tempore possimus ab in suscipit quas minima, sapiente provident aperiam odio doloremque libero maxime facilis ad obcaecati?</p>
+                            </div>
+                            <div className={styles['chat-msg']}>
+                                <span className={styles['chat-msg__timestamp']}>[11:11]</span>
+                                <p className={styles['chat-msg__user']}>[User1]</p>
+                                <p className={styles['chat-msg__text']}>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Iste repudiandae beatae animi illum, tempore possimus ab in suscipit quas minima, sapiente provident aperiam odio doloremque libero maxime facilis ad obcaecati?</p>
+                            </div>
+                            <div className={styles['chat-msg']}>
+                                <span className={styles['chat-msg__timestamp']}>[11:11]</span>
+                                <p className={styles['chat-msg__user']}>[User1]</p>
+                                <p className={styles['chat-msg__text']}>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Iste repudiandae beatae animi illum, tempore possimus ab in suscipit quas minima, sapiente provident aperiam odio doloremque libero maxime facilis ad obcaecati?</p>
+                            </div>
+
+                        </div>
+                        <div className={styles['chat-controls']}>
+                            <textarea className={styles['chat-controls__textarea']}></textarea>
+                            <input className={styles['chat-controls__btn']} type="button" value="Send" />
+                        </div>
+                    </div>
                 </div>
             </div>
+
+
         </>)
 }

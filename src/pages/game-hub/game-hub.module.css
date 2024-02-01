@@ -6,6 +6,7 @@
     --orangeLight: #ed553b;
     --orangeDark: #ee3615;
     --whitish: #F5F5F5;
+    --headingHeight: 130px
 }
 
 .page-wrapper, .hub-wrapper{
@@ -19,7 +20,7 @@
 }
 
 .page-heading{
-    height: 130px;
+    height: var(--headingHeight);
     flex-shrink: 0;
     background-image: linear-gradient(var(--gold),  var(--orangeLight));
     display: flex;
@@ -57,6 +58,7 @@
 }
 
 .page-body{
+    height: calc(100% - var(--headingHeight));
     display: flex;
     flex-grow: 1;
     padding: 50px;

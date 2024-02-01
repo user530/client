@@ -50,36 +50,39 @@ export const GameLobbyPage: React.FC<IGameLobbyPage> = (props: IGameLobbyPage) =
                     <h1 className={styles['h1']}>Tic-Tac-Toe Game Lobby</h1>
                 </div>
                 <div className={styles['page-main']}>
-                    <div className={styles['lobby-wrapper']}>
-                        <div className={styles['lobby-heading']}>
-                            <h2 className={styles['h2']}>Game#: {gameId}</h2>
-                        </div>
-                        <div className={styles['lobby-body']}>
-                            <div className={styles['column']}>
-                                <p className={styles['player-name']}>{host.hostName}</p>
-                                <p className={styles['player-role']}>X</p>
+                    <div className={styles['page-main__row-1']}>
+                        <div className={styles['lobby-wrapper']}>
+                            <div className={styles['lobby-heading']}>
+                                <h2 className={styles['h2']}>Game#: {gameId}</h2>
                             </div>
-                            <div className={styles['column']}>
-                                <p className={styles['player-name']}>{guest ? guest.guestName : '...'}</p>
-                                <p className={styles['player-role']}>O</p>
+                            <div className={styles['lobby-body']}>
+                                <div className={styles['column']}>
+                                    <p className={styles['player-name']}>{host.hostName}</p>
+                                    <p className={styles['player-role']}>X</p>
+                                </div>
+                                <div className={styles['column']}>
+                                    <p className={styles['player-name']}>{guest ? guest.guestName : '...'}</p>
+                                    <p className={styles['player-role']}>O</p>
+                                </div>
                             </div>
-                        </div>
-                        <div className={styles['lobby-controls']}>
-                            <button className={styles['lobby-controls__btn']} onClick={handleLeaveLobbyClick}>Leave</button>
+                            <div className={styles['lobby-controls']}>
+                                <button className={styles['lobby-controls__btn']} onClick={handleLeaveLobbyClick}>Leave</button>
 
-                            {
-                                playerRole === 'host'
-                                    ? <>
-                                        <button className={styles['lobby-controls__btn']} onClick={handleKickGuestClick}>Kick</button>
-                                        <button className={styles['lobby-controls__btn']} onClick={handleStartGameClick}>Start</button>
-                                    </>
-                                    : null
-                            }
+                                {
+                                    playerRole === 'host'
+                                        ? <>
+                                            <button className={styles['lobby-controls__btn']} onClick={handleKickGuestClick}>Kick</button>
+                                            <button className={styles['lobby-controls__btn']} onClick={handleStartGameClick}>Start</button>
+                                        </>
+                                        : null
+                                }
 
+                            </div>
                         </div>
                     </div>
-
-                    <ChatComponent />
+                    <div className={styles['page-main__row-2']}>
+                        <ChatComponent />
+                    </div>
                 </div>
             </div>
 

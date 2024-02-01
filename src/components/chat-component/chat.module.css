@@ -1,13 +1,14 @@
 .chat-wrapper{
     display: flex;
     flex-direction: column;
-    height: calc(((100vh - 130px) - 355px ) - 150px);
+    height: 100%;
     box-shadow: 0 0 20px rgba(255, 255, 255, 0.6);
     background-color: var(--whitish);
     padding: 15px;
 }
 
 .chat-heading{
+    height: 50px;
     flex-shrink: 0;
     background-color: var(--whitish);
     position: relative;
@@ -16,6 +17,7 @@
 }
 
 .chat-main{
+    height: calc(100% - 50px - 75px);
     flex-grow: 1;
     padding-top: 15px;
     background-color: var(--whitish);
@@ -34,7 +36,7 @@
 }
 
 .chat-main__inner{
-    height: calc(((100vh - 130px) - 355px ) - 150px - 30px - 50px - 90px);
+    height: 100%;
     overflow: hidden;
     overflow-y: auto;
     padding-right: 10px;

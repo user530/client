@@ -4,6 +4,7 @@ import { LobbyItem } from '../../components/lobby-item/lobby-item';
 import { useAppDispatch, useAppSelector } from '../../app/hooks/useStore';
 import { sendSocketCommand } from '../../app/store/reducers/slices/socket-messages.slice';
 import { createHubHostMessage, createHubJoinMessage, createHubLeaveMessage } from '@user530/ws_game_shared/creators/messages';
+import { ChatComponent } from '../../components/chat-component/chat.component';
 
 interface IGameHubPage {
 
@@ -55,7 +56,7 @@ export const GameHubPage: React.FC<IGameHubPage> = (props: IGameHubPage) => {
                 <input onClick={handleQuitHubClick} type="button" value="+" />
             </div>
             <div className={styles['page-body']}>
-                <div className={styles['chat-wrapper']}>
+                {/* <div className={styles['chat-wrapper']}>
                     <div className={styles['chat-heading']}>
                         <h2 className={styles['h2']}>General Chat:</h2>
                     </div>
@@ -81,7 +82,10 @@ export const GameHubPage: React.FC<IGameHubPage> = (props: IGameHubPage) => {
                         <textarea className={styles['chat-controls__textarea']}></textarea>
                         <input className={styles['chat-controls__btn']} type="button" value="Send" />
                     </div>
-                </div>
+                </div> */}
+
+                <ChatComponent />
+
                 <div className={styles['hub-wrapper']}>
                     <div className={styles['hub-heading']}>
                         <h2 className={styles['h2']}>Open lobbies:</h2>

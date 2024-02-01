@@ -8,7 +8,7 @@
     --whitish: #F5F5F5;
 }
 
-.page-wrapper, .chat-wrapper, .hub-wrapper{
+.page-wrapper, .hub-wrapper{
     display: flex;
     flex-direction: column;
 }
@@ -59,22 +59,11 @@
 .page-body{
     display: flex;
     flex-grow: 1;
+    padding: 50px;
+    background-color: var(--darkBlue);
+    column-gap: 50px;
 }
 
-.chat-wrapper{
-    background-color: var(--lightBlue);
-    padding: 20px;
-    width: 70%;
-}
-
-.chat-heading{
-    flex-shrink: 0;
-    padding: 10px 0;
-    background-color: var(--whitish);
-    position: relative;
-}
-
-.chat-heading::after, .chat-main::after,
 .hub-heading::after, .hub-main::after{
     content: "";
     position: absolute;
@@ -85,75 +74,7 @@
     left: 15px;
 }
 
-.chat-main{
-    flex-grow: 1;
-    background-color: #F5F5F5;
-    padding: 15px;
-    position: relative;
-}
-
-.chat-msg{
-    display: flex;
-    align-items: baseline;
-    column-gap: 8px;
-    margin-bottom: 10px;
-}
-
-.chat-msg__timestamp{
-    opacity: 0.8;
-}
-
-.chat-msg__user{
-    font-weight: 600;
-}
-.chat-msg__text{}
-
-.chat-controls{
-    flex-shrink: 0;
-    background-color: var(--whitish);
-    padding: 15px;
-    display: flex;
-    align-items: flex-start;
-    column-gap: 25px;
-}
-
-.chat-controls__textarea{
-    flex-grow: 1;
-    display: block;
-    height: 60px;
-    resize: none;
-    border: 1px solid black;
-    padding: 10px;
-}
-
-.chat-controls__textarea:focus{
-    box-shadow: 0 0 10px rgba(0,0,0,0.3) inset;
-}
-
-.chat-controls__btn{
-    flex-shrink: 0;
-    padding-inline: 60px;
-    height: 60px;
-    background-color: var(--lightBlue);
-    font-size: 20px;
-    text-transform: uppercase;
-    color: var(--whitish);
-    box-shadow: 0 0 10px rgba(0,0,0,0.3);
-    transition: 0.4s;
-}
-
-.chat-controls__btn:hover {
-    background-color: var(--orangeLight);
-    transform: translateY(1px);
-    box-shadow: 0 0 10px rgba(0,0,0,0.7);
-}
-
-.chat-controls__btn:active {
-    background-color: var(--orangeDark);
-}
-
 .hub-wrapper{
-    padding: 20px;
     background-color: var(--lightBlue);
     width: 30%;
 }

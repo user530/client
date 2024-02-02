@@ -1,0 +1,70 @@
+.hub-heading::after, .hub-main::after{
+    content: "";
+    position: absolute;
+    height: 1px;
+    background-color: var(--orangeLight);
+    bottom: 0;
+    right: 15px;
+    left: 15px;
+}
+
+.hub-wrapper{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.hub-heading{
+    flex-shrink: 0;
+    background-color: var(--whitish);
+    padding: 10px 0;
+    position: relative;
+}
+
+.h1{
+    font-size: 50px;
+    color: var(--whitish);
+    text-shadow: 1px 1px #000;
+}
+
+.h2{
+    text-align: center;
+}
+
+.hub-main{
+    flex-grow: 1;
+    background-color: var(--whitish);
+    position: relative;
+}
+
+.hub-controls{
+    flex-shrink: 0;
+    background-color: var(--whitish);
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    row-gap: 15px;
+}
+
+.hub-controls input {
+    height: 60px;
+    padding-inline: 15px;
+    flex-grow: 1;
+    background-color: var(--lightBlue);
+    font-size: 24px;
+    text-transform: uppercase;
+    color: var(--whitish);
+    box-shadow: 0 0 10px rgba(0,0,0,0.3);
+    transition: 0.4s;
+}
+
+.hub-controls input:hover {
+    background-color: var(--orangeLight);
+    transform: translateY(1px);
+    box-shadow: 0 0 10px rgba(0,0,0,0.7);
+}
+
+.hub-controls input:active {
+    background-color: var(--orangeDark);
+}

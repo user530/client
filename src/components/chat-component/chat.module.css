@@ -16,6 +16,16 @@
     padding-bottom: 15px;
 }
 
+.h1{
+    font-size: 50px;
+    color: var(--whitish);
+    text-shadow: 1px 1px #000;
+}
+
+.h2{
+    text-align: center;
+}
+
 .chat-main{
     height: calc(100% - 50px - 75px);
     flex-grow: 1;

@@ -1,24 +1,36 @@
 .item {
-    padding: 15px;
-    margin-inline: 15px;
+    width: 100%;
     display: flex;
-    column-gap: 20px;
+    column-gap: 50px;
+    padding: 0px 10px 15px 20px;
     cursor: pointer;
     transition: 0.3s;
     border-bottom: 1px solid #dedede;
     user-select: none;
 }
 
+.item + .item {
+    padding-top: 15px;
+}
+
 .item:hover {
+    padding: 20px;
     background-color:  rgba(135, 206, 250, 0.5);
 }
 
-.item--selected{
+.item--selected, .item--selected:hover{
+    padding: 20px;
     background-color: lightskyblue;
     color: white;
 }
 
-.item--selected:hover{
-    background-color: lightskyblue;
-    color: white;
+.item__index {
+    flex-shrink: 0;
+}
+
+.item__name {
+    flex-grow: 1;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }

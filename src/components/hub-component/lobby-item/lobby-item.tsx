@@ -5,12 +5,12 @@ interface ILobbyItem {
     onClick?: (...args: any[]) => any;
     className?: string | undefined;
     isActive: boolean;
-    gameId: string;
+    itemInd: string;
     hostName: string;
 }
 
 export const LobbyItem: React.FC<ILobbyItem> = (props: ILobbyItem) => {
-    const { className, onClick, gameId, hostName, isActive } = props;
+    const { className, onClick, itemInd, hostName, isActive } = props;
 
     return <div
         onClick={onClick}
@@ -20,8 +20,8 @@ export const LobbyItem: React.FC<ILobbyItem> = (props: ILobbyItem) => {
             (isActive ? ` ${styles['item--selected']}` : '')
         }
     >
-        <p>{gameId}</p>
-        <p>{hostName}</p>
+        <p className={styles['item__index']}>{itemInd}</p>
+        <p className={styles['item__name']}>{hostName}</p>
     </div>
 }
 

@@ -57,7 +57,7 @@
     transform: rotate(135deg);
 }
 
-.page-body{
+.page-main{
     height: calc(100% - var(--headingHeight));
     display: flex;
     flex-grow: 1;
@@ -66,61 +66,10 @@
     column-gap: 50px;
 }
 
-.hub-heading::after, .hub-main::after{
-    content: "";
-    position: absolute;
-    height: 1px;
-    background-color: var(--orangeLight);
-    bottom: 0;
-    right: 15px;
-    left: 15px;
+.page-main__col-1{
+    width: 70%;
 }
-
-.hub-wrapper{
-    background-color: var(--lightBlue);
+.page-main__col-2{
     width: 30%;
 }
 
-.hub-heading{
-    flex-shrink: 0;
-    background-color: var(--whitish);
-    padding: 10px 0;
-    position: relative;
-}
-
-.hub-main{
-    flex-grow: 1;
-    background-color: var(--whitish);
-    position: relative;
-}
-
-.hub-controls{
-    flex-shrink: 0;
-    background-color: var(--whitish);
-    padding: 15px;
-    column-gap: 30px;
-    display: flex;
-    justify-content: space-between;
-}
-
-.hub-controls input {
-    height: 60px;
-    padding-inline: 15px;
-    flex-grow: 1;
-    background-color: var(--lightBlue);
-    font-size: 24px;
-    text-transform: uppercase;
-    color: var(--whitish);
-    box-shadow: 0 0 10px rgba(0,0,0,0.3);
-    transition: 0.4s;
-}
-
-.hub-controls input:hover {
-    background-color: var(--orangeLight);
-    transform: translateY(1px);
-    box-shadow: 0 0 10px rgba(0,0,0,0.7);
-}
-
-.hub-controls input:active {
-    background-color: var(--orangeDark);
-}

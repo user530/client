@@ -1,0 +1,92 @@
+:root {
+    --darkBlue: #173F5F;
+    --lightBlue: #20639b;
+    --cyan: #3CAEA3;
+    --gold: #F6D55C;
+    --orangeLight: #ed553b;
+    --orangeDark: #ee3615;
+    --whitish: #F5F5F5;
+    --headerHeight: 130px;
+}
+
+.lobby-wrapper, .column {
+    display: flex;
+    flex-direction: column;
+}
+
+.lobby-wrapper {
+    height: 100%;
+    width: 40%;
+    min-width: 700px;
+    padding: 15px;
+    font-size: 18px;
+    line-height: 1;
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.6);
+    background-color: var(--whitish);
+}
+
+.lobby-heading {
+    text-align: center;
+    border-bottom: 1px solid var(--orangeDark);
+    padding-bottom: 10px;
+}
+
+.h2 {
+    text-align: center;
+}
+
+.lobby-body {
+    padding: 50px 10px;
+    width: 50%;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 45% 45%;
+    column-gap: 10%;
+    justify-content: space-between;
+}
+
+.column {
+    row-gap: 5px;
+    align-items: center;
+}
+
+.player-name {
+    width: 100%;
+    line-height: 1.7;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    text-align: center;
+}
+
+.player-role {
+    font-size: 72px;
+}
+
+.lobby-controls {
+    padding-top: 15px;
+    border-top: 1px solid var(--orangeDark);
+    display: flex;
+    justify-content: space-between;
+}
+
+.lobby-controls__btn {
+    padding-inline: 60px;
+    height: 60px;
+    background-color: var(--lightBlue);
+    font-size: 20px;
+    text-transform: uppercase;
+    color: var(--whitish);
+    box-shadow: 0 0 10px rgba(0,0,0,0.3);
+    transition: 0.4s;
+}
+
+.lobby-controls__btn:hover {
+    background-color: var(--orangeLight);
+    transform: translateY(1px);
+    box-shadow: 0 0 10px rgba(0,0,0,0.7);
+}
+
+.lobby-controls__btn:active {
+    background-color: var(--orangeDark);
+}

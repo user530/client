@@ -13,10 +13,6 @@ export const HubComponent: React.FC<IHubComponent> = (props: IHubComponent) => {
     const lobbyList = useAppSelector((state) => state.gameData.lobbyList);
     const [selectedLobbyId, setSelectedLobbyId] = React.useState<null | string>(null);
 
-    const lobbyRowClick = (id: string) => {
-        setSelectedLobbyId(id);
-    };
-
     const handleQuitHubClick = () => {
         if (!playerId) return;
 
@@ -51,14 +47,19 @@ export const HubComponent: React.FC<IHubComponent> = (props: IHubComponent) => {
             <div className={styles['hub-heading']}>
                 <h2 className={styles['h2']}>Open lobbies:</h2>
             </div>
-            <div className={styles['hub-main']}>
+            <div className={styles['hub-main']} onClick={() => setSelectedLobbyId(null)}>
                 <div className={styles['hub-main__inner']}>
                     {
                         lobbyList.map(
                             ({ gameId, host: { hostName } }, ind) =>
                             (<LobbyItem
                                 key={gameId}
-                                onClick={(e) => lobbyRowClick(gameId)}
+                                onClick={
+                                    (e: MouseEvent) => {
+                                        e.stopPropagation();
+                                        setSelectedLobbyId(gameId);
+                                    }
+                                }
                                 isActive={selectedLobbyId === gameId}
                                 itemInd={`${ind + 1}`}
                                 hostName={hostName}
@@ -68,7 +69,11 @@ export const HubComponent: React.FC<IHubComponent> = (props: IHubComponent) => {
             </div>
             <div className={styles['hub-controls']}>
                 <input onClick={handleHostGameClick} type="button" value="Host game" />
-                <input onClick={handleJoinGameClick} type="button" value="Join game" />
+                {
+                    selectedLobbyId
+                        ? <input onClick={handleJoinGameClick} type="button" value="Join game" />
+                        : null
+                }
                 <input onClick={handleQuitHubClick} type="button" value="Quit" />
             </div>
         </div>

@@ -52,17 +52,19 @@ export const HubComponent: React.FC<IHubComponent> = (props: IHubComponent) => {
                 <h2 className={styles['h2']}>Open lobbies:</h2>
             </div>
             <div className={styles['hub-main']}>
-                {
-                    lobbyList.map(
-                        ({ gameId, host: { hostName } }) =>
-                        (<LobbyItem
-                            key={gameId}
-                            onClick={(e) => lobbyRowClick(gameId)}
-                            isActive={selectedLobbyId === gameId}
-                            gameId={gameId}
-                            hostName={hostName}
-                        />))
-                }
+                <div className={styles['hub-main__inner']}>
+                    {
+                        lobbyList.map(
+                            ({ gameId, host: { hostName } }, ind) =>
+                            (<LobbyItem
+                                key={gameId}
+                                onClick={(e) => lobbyRowClick(gameId)}
+                                isActive={selectedLobbyId === gameId}
+                                itemInd={`${ind + 1}`}
+                                hostName={hostName}
+                            />))
+                    }
+                </div>
             </div>
             <div className={styles['hub-controls']}>
                 <input onClick={handleHostGameClick} type="button" value="Host game" />

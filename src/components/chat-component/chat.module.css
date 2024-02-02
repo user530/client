@@ -10,8 +10,6 @@
 .chat-heading{
     height: 50px;
     flex-shrink: 0;
-    background-color: var(--whitish);
-    position: relative;
     border-bottom: 1px solid var(--orangeDark);
     padding-bottom: 15px;
 }
@@ -30,7 +28,6 @@
     height: calc(100% - 50px - 75px);
     flex-grow: 1;
     padding-top: 15px;
-    background-color: var(--whitish);
     position: relative;
 }
 
@@ -42,7 +39,7 @@
     bottom: 0;
     height: 20px;
     background: var(--whitish);
-    background: linear-gradient(0deg, var(--whitish) 10%, transparent 100%);
+    background: linear-gradient(0deg, var(--whitish) 15%, transparent 100%);
 }
 
 .chat-main__inner{

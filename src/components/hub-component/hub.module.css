@@ -1,25 +1,18 @@
-.hub-heading::after, .hub-main::after{
-    content: "";
-    position: absolute;
-    height: 1px;
-    background-color: var(--orangeLight);
-    bottom: 0;
-    right: 15px;
-    left: 15px;
-}
-
 .hub-wrapper{
-    width: 100%;
-    height: 100%;
     display: flex;
     flex-direction: column;
+    height: 100%;
+    width: 100%;
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.6);
+    background-color: var(--whitish);
+    padding: 15px;
 }
 
 .hub-heading{
+    height: 50px;
     flex-shrink: 0;
-    background-color: var(--whitish);
-    padding: 10px 0;
-    position: relative;
+    border-bottom: 1px solid var(--orangeDark);
+    padding-bottom: 15px;
 }
 
 .h1{
@@ -33,24 +26,61 @@
 }
 
 .hub-main{
+    height: calc(100% - 50px - 240px);
     flex-grow: 1;
-    background-color: var(--whitish);
+    padding-top: 15px;
     position: relative;
 }
 
+.hub-main::after{
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 20px;
+    background: var(--whitish);
+    background: linear-gradient(0deg, var(--whitish) 15%, transparent 100%);
+}
+
+.hub-main__inner{
+    height: 100%;
+    overflow: hidden;
+    overflow-y: auto;
+    padding-right: 10px;
+    scrollbar-width: thin;
+    scrollbar-color: var(--whitish) var(--lightBlue);
+    scrollbar-gutter: stable;
+}
+
+.hub-main__inner::-webkit-scrollbar{
+  width: 6px;
+}
+
+.hub-main__inner::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background-color: var(--lightBlue);
+}
+
+.hub-main__inner::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.2);
+  border-radius: 10px;
+  background-color: var(--whitish);
+}
+
 .hub-controls{
+    height: 240px;
     flex-shrink: 0;
-    background-color: var(--whitish);
-    padding: 15px;
+    padding-top: 15px;
+    border-top: 1px solid var(--orangeDark);
     display: flex;
     flex-direction: column;
-    row-gap: 15px;
+    justify-content: space-between;
 }
 
 .hub-controls input {
     height: 60px;
     padding-inline: 15px;
-    flex-grow: 1;
     background-color: var(--lightBlue);
     font-size: 24px;
     text-transform: uppercase;

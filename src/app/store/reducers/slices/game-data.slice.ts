@@ -8,7 +8,7 @@ interface IGameDataSlice {
     game: null | StoreGameData;
     gameField: {
         -readonly [key in keyof typeof GameTableRow]: {
-            -readonly [key in keyof typeof GameTableCol]: string | null;
+            -readonly [key in keyof typeof GameTableCol]: 'X' | 'O' | null;
         }
     };
     popupWindow: 'win' | 'loose' | 'draw' | null;
@@ -21,7 +21,7 @@ const defaultGameField = Object.keys(GameTableRow).reduce(
                 rowObj[col as keyof typeof GameTableCol] = null;
                 return rowObj;
             },
-            {} as Record<GameTableCol, string | null>
+            {} as Record<GameTableCol, 'X' | 'O' | null>
         )
 
         return fieldObj

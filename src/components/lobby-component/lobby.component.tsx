@@ -59,7 +59,7 @@ export const LobbyComponent: React.FC<ILobbyComponent> = () => {
                 <button className={styles['lobby-controls__btn']} onClick={handleLeaveLobbyClick}>Leave</button>
 
                 {
-                    playerRole === 'host'
+                    playerRole === 'host' && guest
                         ? <>
                             <button className={styles['lobby-controls__btn']} onClick={handleKickGuestClick}>Kick</button>
                             <button className={styles['lobby-controls__btn']} onClick={handleStartGameClick}>Start</button>

@@ -1,0 +1,48 @@
+:root {
+    --darkBlue: #173F5F;
+    --lightBlue: #20639b;
+    --cyan: #3CAEA3;
+    --gold: #F6D55C;
+    --orangeLight: #ed553b;
+    --orangeDark: #ee3615;
+    --whitish: #F5F5F5;
+}
+
+.game-wrapper {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 40%;
+    min-width: 700px;
+    padding: 15px;
+    font-size: 18px;
+    line-height: 1;
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.6);
+    background-color: var(--whitish);
+}
+
+.game-heading {
+    height: 50px;
+    text-align: center;
+    border-bottom: 1px solid var(--orangeDark);
+    padding-bottom: 10px;
+}
+
+.h2 {
+    text-align: center;
+}
+
+.game-body {
+    padding: 20px 10px;
+    height: calc(100% - 50px - 75px);
+    width: 60%;
+    margin: 0 auto;
+}
+
+.game-controls {
+    height: 75px;
+    padding-top: 15px;
+    border-top: 1px solid var(--orangeDark);
+    display: flex;
+    justify-content: center;
+}

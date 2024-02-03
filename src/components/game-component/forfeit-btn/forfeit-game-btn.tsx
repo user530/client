@@ -1,8 +1,9 @@
 import React from 'react';
-import { useAppDispatch, useAppSelector } from '../../app/hooks/useStore';
-import { isValidUUID } from '../../app/functions/uuid.validate';
+import styles from './forfeit-game-btn.module.css';
+import { useAppDispatch, useAppSelector } from '../../../app/hooks/useStore';
+import { isValidUUID } from '../../../app/functions/uuid.validate';
 import { createInstanceForfeitMessage } from '@user530/ws_game_shared/creators/messages';
-import { sendSocketCommand } from '../../app/store/reducers/slices/socket-messages.slice';
+import { sendSocketCommand } from '../../../app/store/reducers/slices/socket-messages.slice';
 
 interface IForfeitGameBtn {
 
@@ -25,6 +26,6 @@ export const ForfeitGameBtn: React.FC<IForfeitGameBtn> = (props: IForfeitGameBtn
     };
 
     return (<>
-        <button onClick={forfeitBtnHandler}>Forfeit game</button>
+        <button className={styles['forfeit-btn']} onClick={forfeitBtnHandler}>Forfeit game</button>
     </>)
 }

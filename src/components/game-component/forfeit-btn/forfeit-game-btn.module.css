@@ -1,0 +1,30 @@
+:root {
+    --darkBlue: #173F5F;
+    --lightBlue: #20639b;
+    --cyan: #3CAEA3;
+    --gold: #F6D55C;
+    --orangeLight: #ed553b;
+    --orangeDark: #ee3615;
+    --whitish: #F5F5F5;
+}
+
+.forfeit-btn {
+    padding-inline: 60px;
+    height: 60px;
+    background-color: var(--lightBlue);
+    font-size: 20px;
+    text-transform: uppercase;
+    color: var(--whitish);
+    box-shadow: 0 0 10px rgba(0,0,0,0.3);
+    transition: 0.4s;
+}
+
+.forfeit-btn:hover {
+    background-color: var(--orangeLight);
+    transform: translateY(1px);
+    box-shadow: 0 0 10px rgba(0,0,0,0.7);
+}
+
+.forfeit-btn:active {
+    background-color: var(--orangeDark);
+}

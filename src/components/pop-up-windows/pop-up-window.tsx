@@ -21,7 +21,16 @@ export const PopUpWindow: React.FC<IPopUpWindow> = (props: IPopUpWindow) => {
     }
 
     return <>
-        <div style={{ backgroundColor: type }}>
+        <div style={{
+            position: 'absolute',
+            width: '400px',
+            height: '400px',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            backgroundColor: type,
+
+        }}>
             <p>{message}</p>
 
             {

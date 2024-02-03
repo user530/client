@@ -2,9 +2,9 @@ import React from 'react';
 import styles from './game-field-cell.module.css';
 import { GameTableCol, GameTableRow } from '@user530/ws_game_shared/enums';
 import { createInstanceMakeTurnMessage } from '@user530/ws_game_shared/creators/messages';
-import { useAppSelector, useAppDispatch } from '../../../../app/hooks/useStore';
-import { sendSocketCommand } from '../../../../app/store/reducers/slices/socket-messages.slice';
-import { isValidUUID } from '../../../../app/functions/uuid.validate';
+import { useAppDispatch, useAppSelector } from '../../../../../app/hooks/useStore';
+import { isValidUUID } from '../../../../../app/functions/uuid.validate';
+import { sendSocketCommand } from '../../../../../app/store/reducers/slices/socket-messages.slice';
 
 interface IGameFieldCell {
     col: GameTableCol;
@@ -18,7 +18,7 @@ export const GameFieldCell: React.FC<IGameFieldCell> = (props: IGameFieldCell) =
 
     const playerId = useAppSelector((state) => state.gameData.player?.playerId);
     const gameId = useAppSelector((state) => state.gameData.game?.gameId);
-    const gameGrid = useAppSelector((state) => state.gameData.gameField[row][column])
+    const cellMark = useAppSelector((state) => state.gameData.gameField[row][column])
 
     const dispatch = useAppDispatch();
 
@@ -32,7 +32,9 @@ export const GameFieldCell: React.FC<IGameFieldCell> = (props: IGameFieldCell) =
     };
 
     return (
-        <div className={styles.cell} onClick={cellClickHandler}>
-            {gameGrid}
+        <div
+            className={`${styles['cell']} ${cellMark === 'X' ? styles['cell--cross'] : styles['cell--nought']}`}
+            onClick={cellClickHandler}>
+            {cellMark}
         </div>)
 }

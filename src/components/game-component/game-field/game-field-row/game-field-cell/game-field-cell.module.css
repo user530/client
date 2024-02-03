@@ -1,0 +1,44 @@
+:root {
+    --darkBlue: #173F5F;
+    --lightBlue: #20639b;
+    --cyan: #3CAEA3;
+    --gold: #F6D55C;
+    --orangeLight: #ed553b;
+    --orangeDark: #ee3615;
+    --whitish: #F5F5F5;
+}
+
+.cell {
+    width: 100px;
+    height: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 64px;
+    font-family: sans-serif;
+    line-height: 1;
+    background-color: var(--whitish);
+    border-left: 1px solid black;
+    cursor: pointer;
+    box-shadow: inset 0px 0px 10px 1px rgba(0, 0, 0, 0.3);
+}
+
+.cell--cross {
+    color: var(--orangeDark);
+}
+
+.cell--nought {
+    color: var(--lightBlue);
+}
+
+.cell:last-child {
+    border-right: 1px solid black;
+}
+
+.cell:hover {
+    box-shadow: inset 0px 0px 12px 3px rgba(0, 0, 0, 0.5);
+}
+
+.cell:active {
+    background-color: var(--gold);
+}

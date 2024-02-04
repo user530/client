@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { GameTableCol, GameTableRow } from '@user530/ws_game_shared/enums';
 import { StorePlayerData, StoreGameData, OpenLobbyStateData, LobbyStateData, TurnData } from '@user530/ws_game_shared/interfaces/general';
+import { PopupGameResult, PopupError } from '../../../functions/popup.creator';
 
 interface IGameDataSlice {
     lobbyList: OpenLobbyStateData[];
@@ -11,7 +12,7 @@ interface IGameDataSlice {
             -readonly [key in keyof typeof GameTableCol]: 'X' | 'O' | null;
         }
     };
-    popupWindow: 'win' | 'loose' | 'draw' | null;
+    popupWindow: PopupGameResult | PopupError | null;
 }
 
 const defaultGameField = Object.keys(GameTableRow).reduce(
@@ -63,7 +64,7 @@ const gameDataSlice = createSlice({
                 state.gameField[row][col] = mark;
             }
         },
-        setPopup(state, action: PayloadAction<'win' | 'loose' | 'draw' | null>) {
+        setPopup(state, action: PayloadAction<PopupGameResult | PopupError | null>) {
             state.popupWindow = action.payload;
         }
     }

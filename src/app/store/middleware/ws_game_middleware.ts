@@ -6,6 +6,7 @@ import { gameSocketConnection, handleFailedAuth, hubSocketConnection, lobbySocke
 import { GameInstanceEventsHandler, GameHubEventsHandler, GameLobbyEventsHandler } from '@user530/ws_game_shared/interfaces/ws-listeners';
 import { GameEvent, HubEvent, LobbyEvent, MessageType } from '@user530/ws_game_shared/types';
 import { RootState, StoreDispatch, StoreActions } from '../ws_game_store';
+import { createDrawPopup, createErrorPopup, createLosePopup, createWinPopup } from '../../functions/popup.creator';
 
 
 export const createWSMiddleware: Middleware<any, any, Dispatch<AnyAction>> =
@@ -19,6 +20,8 @@ export const createWSMiddleware: Middleware<any, any, Dispatch<AnyAction>> =
                 console.log('Socket - Error Event!');
                 const { code, message } = errEvent;
                 console.error(`Error: ${code} ${message}`);
+                // Pop-up error
+                api.dispatch(setPopup(createErrorPopup({ heading: `Error #${code}`, message })));
             },
 
             async wsHubGamesUpdatedListener(gamesUpdatedEvent) {
@@ -62,7 +65,10 @@ export const createWSMiddleware: Middleware<any, any, Dispatch<AnyAction>> =
                 console.log('Socket - Error Event!');
                 const { code, message } = errEvent;
                 console.error(`Error: ${code} ${message}`);
+                // Pop-up error
+                api.dispatch(setPopup(createErrorPopup({ heading: `Error #${code}`, message })));
             },
+
             async wsLobbyGuestJoinedListener(guestJoinedEvent) {
                 console.log('Socket - LOBBY GUEST JOINED EVENT!');
                 console.log(guestJoinedEvent);
@@ -74,6 +80,7 @@ export const createWSMiddleware: Middleware<any, any, Dispatch<AnyAction>> =
 
                 api.dispatch(setGame({ ...gameData, guest }))
             },
+
             async wsLobbyGuestLeftListener(guestLeftEvent) {
                 console.log('Socket - LOBBY GUEST LEFT EVENT!');
                 console.log(guestLeftEvent);
@@ -83,6 +90,7 @@ export const createWSMiddleware: Middleware<any, any, Dispatch<AnyAction>> =
 
                 api.dispatch(setGame({ ...gameData, guest: null }));
             },
+
             async wsLobbyToGameListener(movedToGameEvent) {
                 console.log('Socket - LOBBY MOVED TO GAME EVENT!');
                 console.log(movedToGameEvent);
@@ -92,6 +100,7 @@ export const createWSMiddleware: Middleware<any, any, Dispatch<AnyAction>> =
                 api.dispatch(setGame(data));
                 api.dispatch(gameSocketConnection());
             },
+
             async wsLobbyToHubListener(movedToHubEvent) {
                 console.log('Socket - LOBBY MOVED TO HUB EVENT!');
                 console.log(movedToHubEvent);
@@ -109,6 +118,8 @@ export const createWSMiddleware: Middleware<any, any, Dispatch<AnyAction>> =
                 console.log('Socket - Error Event!');
                 const { code, message } = errEvent;
                 console.error(`Error: ${code} ${message}`);
+                // Pop-up error
+                api.dispatch(setPopup(createErrorPopup({ heading: `Error #${code}`, message })));
             },
 
             async wsGameNewTurnListener(newTurnEvent: GameEventNewTurn): Promise<void> {
@@ -124,9 +135,9 @@ export const createWSMiddleware: Middleware<any, any, Dispatch<AnyAction>> =
                 console.log(gameWonEvent);
                 const playerId = api.getState().gameData.player?.playerId;
                 if (gameWonEvent.data.playerId === playerId)
-                    api.dispatch(setPopup('win'))
+                    api.dispatch(setPopup(createWinPopup()))
                 else
-                    api.dispatch(setPopup('loose'))
+                    api.dispatch(setPopup(createLosePopup()))
                 // Clear the gameField store
                 api.dispatch(setGameField(null));
             },
@@ -134,7 +145,7 @@ export const createWSMiddleware: Middleware<any, any, Dispatch<AnyAction>> =
             async wsGameDrawListener(gameDrawEvent: GameEventGameDraw): Promise<void> {
                 console.log('Socket - Game Draw Event!');
                 console.log(gameDrawEvent);
-                api.dispatch(setPopup('draw'))
+                api.dispatch(setPopup(createDrawPopup()))
                 // Clear the gameField store
                 api.dispatch(setGameField(null));
             },

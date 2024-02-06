@@ -18,7 +18,7 @@ export const GameLobbyPage: React.FC<IGameLobbyPage> = (props: IGameLobbyPage) =
                     </div>
 
                     <div className={styles['row-2']}>
-                        <ChatComponent />
+                        <ChatComponent heading='Lobby chat:' />
                     </div>
                 </div>
             </AppPageTemplate>

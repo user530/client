@@ -18,7 +18,7 @@ export const GameInstancePage: React.FC<IGameInstancePage> = (props: IGameInstan
                 </div>
 
                 <div className={styles['row-2']}>
-                    <ChatComponent />
+                    <ChatComponent heading='Game chat:' />
                 </div>
             </div>
         </AppPageTemplate>

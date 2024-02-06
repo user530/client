@@ -10,7 +10,7 @@ export const GameHubPage: React.FC = () => {
         <AppPageTemplate>
             <div className={styles['flex']}>
                 <div className={styles['column-main']}>
-                    <ChatComponent />
+                    <ChatComponent heading='General chat:' />
                 </div>
 
                 <div className={styles['column-sub']}>

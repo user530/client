@@ -1,10 +1,10 @@
 import { AnyAction, Dispatch, Middleware, MiddlewareAPI } from '@reduxjs/toolkit';
-import { ErrorEvent, GameEventNewTurn, GameEventGameWon, GameEventGameDraw } from '@user530/ws_game_shared/interfaces/ws-events';
+import { ErrorEvent, GameEventNewTurn, GameEventGameWon, GameEventGameDraw, ChatEventNewMessage } from '@user530/ws_game_shared/interfaces/ws-events';
 import { Socket, io } from 'socket.io-client';
-import { setGame, setGameField, setLobby, setLobbyList, setPlayer, setPopup } from '../reducers/slices/game-data.slice';
+import { addMessage, resetMessages, setGame, setGameField, setLobby, setLobbyList, setPlayer, setPopup } from '../reducers/slices/game-data.slice';
 import { gameSocketConnection, handleFailedAuth, hubSocketConnection, lobbySocketConnection } from '../reducers/slices/socket-messages.slice';
-import { GameInstanceEventsHandler, GameHubEventsHandler, GameLobbyEventsHandler } from '@user530/ws_game_shared/interfaces/ws-listeners';
-import { GameEvent, HubEvent, LobbyEvent, MessageType } from '@user530/ws_game_shared/types';
+import { GameInstanceEventsHandler, GameHubEventsHandler, GameLobbyEventsHandler, ErrorEventsHandler, ChatEventsHandler } from '@user530/ws_game_shared/interfaces/ws-listeners';
+import { ChatEvent, GameEvent, HubEvent, LobbyEvent, MessageType } from '@user530/ws_game_shared/types';
 import { RootState, StoreDispatch, StoreActions } from '../ws_game_store';
 import { createDrawPopup, createErrorPopup, createLosePopup, createWinPopup } from '../../functions/popup.creator';
 
@@ -15,7 +15,7 @@ export const createWSMiddleware: Middleware<any, any, Dispatch<AnyAction>> =
 
         let socket: Socket;
 
-        const hubEventHandler: GameHubEventsHandler = {
+        const errorEventHandler: ErrorEventsHandler = {
             async wsErrorListener(errEvent: ErrorEvent) {
                 console.log('Socket - Error Event!');
                 const { code, message } = errEvent;
@@ -23,7 +23,19 @@ export const createWSMiddleware: Middleware<any, any, Dispatch<AnyAction>> =
                 // Pop-up error
                 api.dispatch(setPopup(createErrorPopup({ heading: `Error #${code}`, message })));
             },
+        };
 
+        const chatEventHandler: ChatEventsHandler = {
+            async wsChatNewMsgListener(newMsgEvent: ChatEventNewMessage) {
+                console.log('Chat Socket - New Msg Event!');
+                const { data } = newMsgEvent;
+                console.log(data);
+                // Add message to the chat
+                api.dispatch(addMessage(data));
+            },
+        };
+
+        const hubEventHandler: GameHubEventsHandler = {
             async wsHubGamesUpdatedListener(gamesUpdatedEvent) {
                 console.log('Socket - HUB GAMES UPDATE EVENT!');
                 console.log(gamesUpdatedEvent);
@@ -40,6 +52,7 @@ export const createWSMiddleware: Middleware<any, any, Dispatch<AnyAction>> =
                 // Set lobby data, clear up lobby list and connect to the lobby socket
                 api.dispatch(setLobby(data));
                 api.dispatch(setLobbyList([]));
+                api.dispatch(resetMessages());
                 api.dispatch(lobbySocketConnection());
             },
 
@@ -49,26 +62,24 @@ export const createWSMiddleware: Middleware<any, any, Dispatch<AnyAction>> =
                 // Set game data, clear up lobby list and connect to the game socket
                 api.dispatch(setGame(data));
                 api.dispatch(setLobbyList([]));
+                api.dispatch(resetMessages());
                 api.dispatch(gameSocketConnection());
             },
 
             async wsHubQuitHubListener(quitHubEvent) {
                 console.log('Socket - HUB QUIT HUB EVENT!');
+                // Clean up the store
                 api.dispatch(setPlayer(null));
+                api.dispatch(setGame(null));
+                api.dispatch(setLobbyList([]));
+                api.dispatch(setGameField(null));
+                api.dispatch(resetMessages());
                 socket.removeAllListeners();
                 socket.disconnect();
             },
-        }
+        };
 
         const lobbyEventHandler: GameLobbyEventsHandler = {
-            async wsErrorListener(errEvent) {
-                console.log('Socket - Error Event!');
-                const { code, message } = errEvent;
-                console.error(`Error: ${code} ${message}`);
-                // Pop-up error
-                api.dispatch(setPopup(createErrorPopup({ heading: `Error #${code}`, message })));
-            },
-
             async wsLobbyGuestJoinedListener(guestJoinedEvent) {
                 console.log('Socket - LOBBY GUEST JOINED EVENT!');
                 console.log(guestJoinedEvent);
@@ -98,6 +109,7 @@ export const createWSMiddleware: Middleware<any, any, Dispatch<AnyAction>> =
                 const { data } = movedToGameEvent;
 
                 api.dispatch(setGame(data));
+                api.dispatch(resetMessages());
                 api.dispatch(gameSocketConnection());
             },
 
@@ -109,19 +121,12 @@ export const createWSMiddleware: Middleware<any, any, Dispatch<AnyAction>> =
                 if (!gameData) return;
 
                 api.dispatch(setGame(null));
+                api.dispatch(resetMessages());
                 api.dispatch(hubSocketConnection());
             },
-        }
+        };
 
         const gameEventHandler: GameInstanceEventsHandler = {
-            async wsErrorListener(errEvent: ErrorEvent): Promise<void> {
-                console.log('Socket - Error Event!');
-                const { code, message } = errEvent;
-                console.error(`Error: ${code} ${message}`);
-                // Pop-up error
-                api.dispatch(setPopup(createErrorPopup({ heading: `Error #${code}`, message })));
-            },
-
             async wsGameNewTurnListener(newTurnEvent: GameEventNewTurn): Promise<void> {
                 console.log('Socket - New Turn Event!');
                 console.log(newTurnEvent);
@@ -149,7 +154,7 @@ export const createWSMiddleware: Middleware<any, any, Dispatch<AnyAction>> =
                 // Clear the gameField store
                 api.dispatch(setGameField(null));
             },
-        }
+        };
 
         return (next: StoreDispatch) => (action: StoreActions) => {
             console.log('MIDDLEWARE FIRED!');
@@ -169,10 +174,16 @@ export const createWSMiddleware: Middleware<any, any, Dispatch<AnyAction>> =
                         }
                     });
 
-                socket.on('connect', () => console.log('HUB SOCKET CONNECTED!'))
-                socket.on('disconnect', () => console.log('HUB SOCKET DISCONNECTED!'))
+                socket.on('connect', () => console.log('HUB SOCKET CONNECTED!'));
+                socket.on('disconnect', () => console.log('HUB SOCKET DISCONNECTED!'));
+
+                // Set up error listener
+                socket.on(MessageType.ErrorMessage, errorEventHandler.wsErrorListener);
+
+                // Set up chat new message listener
+                socket.on(ChatEvent.NewMessage, chatEventHandler.wsChatNewMsgListener);
+
                 // Set up hub listeners
-                socket.on(MessageType.ErrorMessage, hubEventHandler.wsErrorListener);
                 socket.on(HubEvent.GamesUpdated, hubEventHandler.wsHubGamesUpdatedListener);
                 socket.on(HubEvent.MovedToLobby, hubEventHandler.wsHubMovedToLobbyListener);
                 socket.on(HubEvent.MovedToGame, hubEventHandler.wsHubMovedToGameListener);
@@ -194,10 +205,16 @@ export const createWSMiddleware: Middleware<any, any, Dispatch<AnyAction>> =
                         }
                     });
 
-                socket.on('connect', () => console.log('LOBBY SOCKET CONNECTED!'))
-                socket.on('disconnect', () => console.log('LOBBY SOCKET DISCONNECTED!'))
+                socket.on('connect', () => console.log('LOBBY SOCKET CONNECTED!'));
+                socket.on('disconnect', () => console.log('LOBBY SOCKET DISCONNECTED!'));
+
+                // Set up error listener
+                socket.on(MessageType.ErrorMessage, errorEventHandler.wsErrorListener);
+
+                // Set up chat new message listener
+                socket.on(ChatEvent.NewMessage, chatEventHandler.wsChatNewMsgListener);
+
                 // Set up lobby listeners
-                socket.on(MessageType.ErrorMessage, lobbyEventHandler.wsErrorListener);
                 socket.on(LobbyEvent.GuestJoined, lobbyEventHandler.wsLobbyGuestJoinedListener);
                 socket.on(LobbyEvent.GuestLeft, lobbyEventHandler.wsLobbyGuestLeftListener);
                 socket.on(LobbyEvent.MovedToGame, lobbyEventHandler.wsLobbyToGameListener);
@@ -222,10 +239,16 @@ export const createWSMiddleware: Middleware<any, any, Dispatch<AnyAction>> =
                         }
                     });
 
-                socket.on('connect', () => console.log('GAME SOCKET CONNECTED!'))
-                socket.on('disconnect', () => console.log('GAME SOCKET DISCONNECTED!'))
+                socket.on('connect', () => console.log('GAME SOCKET CONNECTED!'));
+                socket.on('disconnect', () => console.log('GAME SOCKET DISCONNECTED!'));
+
+                // Set up error listener
+                socket.on(MessageType.ErrorMessage, errorEventHandler.wsErrorListener);
+
+                // Set up chat new message listener
+                socket.on(ChatEvent.NewMessage, chatEventHandler.wsChatNewMsgListener);
+
                 // Set up game listeners
-                socket.on(MessageType.ErrorMessage, gameEventHandler.wsErrorListener);
                 socket.on(GameEvent.GameWon, gameEventHandler.wsGameWonListener);
                 socket.on(GameEvent.GameDraw, gameEventHandler.wsGameDrawListener);
                 socket.on(GameEvent.NewTurn, gameEventHandler.wsGameNewTurnListener);

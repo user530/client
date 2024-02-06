@@ -1,7 +1,8 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { GameTableCol, GameTableRow } from '@user530/ws_game_shared/enums';
-import { StorePlayerData, StoreGameData, OpenLobbyStateData, LobbyStateData, TurnData } from '@user530/ws_game_shared/interfaces/general';
+import { StorePlayerData, StoreGameData, OpenLobbyStateData, LobbyStateData, TurnData, MessageData } from '@user530/ws_game_shared/interfaces/general';
 import { PopupGameResult, PopupError } from '../../../functions/popup.creator';
+import { ChatEventNewMsgData } from '@user530/ws_game_shared/interfaces/ws-events';
 
 interface IGameDataSlice {
     lobbyList: OpenLobbyStateData[];
@@ -13,6 +14,7 @@ interface IGameDataSlice {
         }
     };
     popupWindow: PopupGameResult | PopupError | null;
+    messages: ChatEventNewMsgData[];
 }
 
 const defaultGameField = Object.keys(GameTableRow).reduce(
@@ -36,6 +38,7 @@ const initialState: IGameDataSlice = {
     game: null,
     gameField: defaultGameField,
     popupWindow: null,
+    messages: [],
 }
 
 const gameDataSlice = createSlice({
@@ -66,9 +69,15 @@ const gameDataSlice = createSlice({
         },
         setPopup(state, action: PayloadAction<PopupGameResult | PopupError | null>) {
             state.popupWindow = action.payload;
+        },
+        addMessage(state, action: PayloadAction<ChatEventNewMsgData>) {
+            state.messages.push(action.payload);
+        },
+        resetMessages(state) {
+            state.messages = [];
         }
     }
 })
 
-export const { setGame, setLobby, setPlayer, setGameField, setPopup, setLobbyList } = gameDataSlice.actions;
+export const { setGame, setLobby, setPlayer, setGameField, setPopup, setLobbyList, addMessage, resetMessages } = gameDataSlice.actions;
 export default gameDataSlice;

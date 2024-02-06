@@ -8,6 +8,7 @@ import {
     LobbyCommandStartGame,
     GameCommandForfeit,
     GameCommandMakeTurn,
+    ChatCommandSendMessage,
 } from '@user530/ws_game_shared/interfaces/ws-messages';
 
 
@@ -40,10 +41,10 @@ const socketMessagesSlice = createSlice({
             | LobbyCommandStartGame
             | GameCommandMakeTurn
             | GameCommandForfeit
+            | ChatCommandSendMessage
         >) {
             return 'SENT GAME COMMAND MESSAGE';
         },
-
     }
 });
 

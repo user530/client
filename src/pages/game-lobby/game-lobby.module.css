@@ -1,6 +1,7 @@
 .flex-column {
     display: flex;
     flex-direction: column;
+    align-items: center;
     row-gap: 50px;
     width: 100%;
     height: 100%;
@@ -8,10 +9,9 @@
 
 .row-1 {
     height: 355px;
-    margin: 0 auto;
 }
 
 .row-2 {
     height: calc(100% - 50px - 355px);
-    margin: 0 auto;
+    width: 70%;
 }

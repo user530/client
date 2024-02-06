@@ -1,117 +1,79 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import styles from './chat.module.css';
+import { useAppDispatch, useAppSelector } from '../../app/hooks/useStore';
+import { ChatMessage } from './chat-message/chat-message.component';
+import { sendSocketCommand } from '../../app/store/reducers/slices/socket-messages.slice';
+import { createChatSendMsgMessage } from '@user530/ws_game_shared/creators/messages';
+import { createErrorPopup } from '../../app/functions/popup.creator';
+import { setPopup } from '../../app/store/reducers/slices/game-data.slice';
 
 interface IChatComponent {
-
+    heading?: string;
 }
 
 export const ChatComponent: React.FC<IChatComponent> = (props: IChatComponent) => {
 
+    const messages = useAppSelector(state => state.gameData.messages);
+    const user = useAppSelector(state => state.gameData.player?.playerName);
+    const inputRef = useRef<HTMLTextAreaElement>(null);
+    const [inputLen, setInputLen] = React.useState<number>(0);
+    const dispatch = useAppDispatch();
+
+    const chatSendBtnHandler = React.useCallback(() => {
+        console.log('SEND CHAT MSG BTN FIRED');
+        // Handle exceptions
+        if (!user || !inputRef.current) {
+            const errEvent = createErrorPopup({ heading: 'Error #401', message: 'Can\'t send message if not authorized!' });
+            return dispatch(setPopup(errEvent));
+        }
+
+        // Ignore empty input
+        const inputTxt = inputRef.current.value.trim();
+        if (!inputTxt) return;
+
+        // Create and send WS message
+        const message = createChatSendMsgMessage({ message: inputTxt, user });
+        dispatch(sendSocketCommand(message));
+
+        // Clear the input
+        inputRef.current.value = '';
+
+    }, [user]);
+
     return <>
         <div className={styles['chat-wrapper']}>
             <div className={styles['chat-heading']}>
-                <h2 className={styles['h2']}>Lobby Chat:</h2>
+                <h2 className={styles['h2']}>{props.heading ? props.heading : 'Chat:'}</h2>
             </div>
 
             <div className={styles['chat-main']}>
                 <div className={styles['chat-main__inner']}>
-                    <div className={styles['chat-msg']}>
-                        <span className={styles['chat-msg__timestamp']}>[11:11]</span>
-                        <p className={styles['chat-msg__user']}>[User1]</p>
-                        <p className={styles['chat-msg__text']}>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Iste repudiandae beatae animi illum, tempore possimus ab in suscipit quas minima, sapiente provident aperiam odio doloremque libero maxime facilis ad obcaecati?</p>
-                    </div>
-                    <div className={styles['chat-msg']}>
-                        <span className={styles['chat-msg__timestamp']}>[11:11]</span>
-                        <p className={styles['chat-msg__user']}>[User1]</p>
-                        <p className={styles['chat-msg__text']}>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Iste repudiandae beatae animi illum, tempore possimus ab in suscipit quas minima, sapiente provident aperiam odio doloremque libero maxime facilis ad obcaecati?</p>
-                    </div>
-                    <div className={styles['chat-msg']}>
-                        <span className={styles['chat-msg__timestamp']}>[11:11]</span>
-                        <p className={styles['chat-msg__user']}>[User1]</p>
-                        <p className={styles['chat-msg__text']}>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Iste repudiandae beatae animi illum, tempore possimus ab in suscipit quas minima, sapiente provident aperiam odio doloremque libero maxime facilis ad obcaecati?</p>
-                    </div>
-                    <div className={styles['chat-msg']}>
-                        <span className={styles['chat-msg__timestamp']}>[11:11]</span>
-                        <p className={styles['chat-msg__user']}>[User1]</p>
-                        <p className={styles['chat-msg__text']}>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Iste repudiandae beatae animi illum, tempore possimus ab in suscipit quas minima, sapiente provident aperiam odio doloremque libero maxime facilis ad obcaecati?</p>
-                    </div>
-                    <div className={styles['chat-msg']}>
-                        <span className={styles['chat-msg__timestamp']}>[11:11]</span>
-                        <p className={styles['chat-msg__user']}>[User1]</p>
-                        <p className={styles['chat-msg__text']}>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Iste repudiandae beatae animi illum, tempore possimus ab in suscipit quas minima, sapiente provident aperiam odio doloremque libero maxime facilis ad obcaecati?</p>
-                    </div>
-                    <div className={styles['chat-msg']}>
-                        <span className={styles['chat-msg__timestamp']}>[11:11]</span>
-                        <p className={styles['chat-msg__user']}>[User1]</p>
-                        <p className={styles['chat-msg__text']}>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Iste repudiandae beatae animi illum, tempore possimus ab in suscipit quas minima, sapiente provident aperiam odio doloremque libero maxime facilis ad obcaecati?</p>
-                    </div>
-                    <div className={styles['chat-msg']}>
-                        <span className={styles['chat-msg__timestamp']}>[11:11]</span>
-                        <p className={styles['chat-msg__user']}>[User1]</p>
-                        <p className={styles['chat-msg__text']}>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Iste repudiandae beatae animi illum, tempore possimus ab in suscipit quas minima, sapiente provident aperiam odio doloremque libero maxime facilis ad obcaecati?</p>
-                    </div>
-                    <div className={styles['chat-msg']}>
-                        <span className={styles['chat-msg__timestamp']}>[11:11]</span>
-                        <p className={styles['chat-msg__user']}>[User1]</p>
-                        <p className={styles['chat-msg__text']}>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Iste repudiandae beatae animi illum, tempore possimus ab in suscipit quas minima, sapiente provident aperiam odio doloremque libero maxime facilis ad obcaecati?</p>
-                    </div>
-                    <div className={styles['chat-msg']}>
-                        <span className={styles['chat-msg__timestamp']}>[11:11]</span>
-                        <p className={styles['chat-msg__user']}>[User1]</p>
-                        <p className={styles['chat-msg__text']}>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Iste repudiandae beatae animi illum, tempore possimus ab in suscipit quas minima, sapiente provident aperiam odio doloremque libero maxime facilis ad obcaecati?</p>
-                    </div>
-                    <div className={styles['chat-msg']}>
-                        <span className={styles['chat-msg__timestamp']}>[11:11]</span>
-                        <p className={styles['chat-msg__user']}>[User1]</p>
-                        <p className={styles['chat-msg__text']}>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Iste repudiandae beatae animi illum, tempore possimus ab in suscipit quas minima, sapiente provident aperiam odio doloremque libero maxime facilis ad obcaecati?</p>
-                    </div>
-                    <div className={styles['chat-msg']}>
-                        <span className={styles['chat-msg__timestamp']}>[11:11]</span>
-                        <p className={styles['chat-msg__user']}>[User1]</p>
-                        <p className={styles['chat-msg__text']}>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Iste repudiandae beatae animi illum, tempore possimus ab in suscipit quas minima, sapiente provident aperiam odio doloremque libero maxime facilis ad obcaecati?</p>
-                    </div>
-                    <div className={styles['chat-msg']}>
-                        <span className={styles['chat-msg__timestamp']}>[11:11]</span>
-                        <p className={styles['chat-msg__user']}>[User1]</p>
-                        <p className={styles['chat-msg__text']}>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Iste repudiandae beatae animi illum, tempore possimus ab in suscipit quas minima, sapiente provident aperiam odio doloremque libero maxime facilis ad obcaecati?</p>
-                    </div>
-                    <div className={styles['chat-msg']}>
-                        <span className={styles['chat-msg__timestamp']}>[11:11]</span>
-                        <p className={styles['chat-msg__user']}>[User1]</p>
-                        <p className={styles['chat-msg__text']}>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Iste repudiandae beatae animi illum, tempore possimus ab in suscipit quas minima, sapiente provident aperiam odio doloremque libero maxime facilis ad obcaecati?</p>
-                    </div>
-                    <div className={styles['chat-msg']}>
-                        <span className={styles['chat-msg__timestamp']}>[11:11]</span>
-                        <p className={styles['chat-msg__user']}>[User1]</p>
-                        <p className={styles['chat-msg__text']}>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Iste repudiandae beatae animi illum, tempore possimus ab in suscipit quas minima, sapiente provident aperiam odio doloremque libero maxime facilis ad obcaecati?</p>
-                    </div>
-                    <div className={styles['chat-msg']}>
-                        <span className={styles['chat-msg__timestamp']}>[11:11]</span>
-                        <p className={styles['chat-msg__user']}>[User1]</p>
-                        <p className={styles['chat-msg__text']}>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Iste repudiandae beatae animi illum, tempore possimus ab in suscipit quas minima, sapiente provident aperiam odio doloremque libero maxime facilis ad obcaecati?</p>
-                    </div>
-                    <div className={styles['chat-msg']}>
-                        <span className={styles['chat-msg__timestamp']}>[11:11]</span>
-                        <p className={styles['chat-msg__user']}>[User1]</p>
-                        <p className={styles['chat-msg__text']}>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Iste repudiandae beatae animi illum, tempore possimus ab in suscipit quas minima, sapiente provident aperiam odio doloremque libero maxime facilis ad obcaecati?</p>
-                    </div>
-                    <div className={styles['chat-msg']}>
-                        <span className={styles['chat-msg__timestamp']}>[11:11]</span>
-                        <p className={styles['chat-msg__user']}>[User1]</p>
-                        <p className={styles['chat-msg__text']}>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Iste repudiandae beatae animi illum, tempore possimus ab in suscipit quas minima, sapiente provident aperiam odio doloremque libero maxime facilis ad obcaecati?</p>
-                    </div>
-                    <div className={styles['chat-msg']}>
-                        <span className={styles['chat-msg__timestamp']}>[11:11]</span>
-                        <p className={styles['chat-msg__user']}>[User1]</p>
-                        <p className={styles['chat-msg__text']}>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Iste repudiandae beatae animi illum, tempore possimus ab in suscipit quas minima, sapiente provident aperiam odio doloremque libero maxime facilis ad obcaecati?</p>
-                    </div>
-
+                    {
+                        messages.map((message, ind) => <ChatMessage key={ind} {...message} />)
+                    }
                 </div>
             </div>
 
             <div className={styles['chat-controls']}>
-                <textarea className={styles['chat-controls__textarea']} placeholder='Message text'></textarea>
-                <input className={styles['chat-controls__btn']} type="button" value="Send" />
+                <div className={styles['chat-controls__textarea']}>
+                    <textarea
+                        ref={inputRef}
+                        className={styles['textarea__input']}
+                        placeholder='Message text'
+                        maxLength={255}
+                        onChange={(e) => setInputLen(e.target.value.length)}
+                    />
+                    <span className={styles['textarea__counter']}
+                        style={{ color: `rgba(${255 * inputLen / 255}, ${255 * (1 - inputLen / 255)}, 0, 0.9)` }}
+                    >{inputLen} / 255</span>
+                </div>
+
+                <input
+                    className={styles['chat-controls__btn']}
+                    type="button"
+                    value="Send"
+                    onClick={chatSendBtnHandler}
+                />
             </div>
         </div>
     </>

@@ -44,6 +44,7 @@
 
 .heading__error {
     background-color: red;
+    color: var(--whitish);
 }
 
 .heading__success {

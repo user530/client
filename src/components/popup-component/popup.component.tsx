@@ -1,7 +1,7 @@
 import React from 'react';
 import { PopUpWindow } from './popup-window/popup-window';
 import { useAppDispatch, useAppSelector } from '../../app/hooks/useStore';
-import { setGame } from '../../app/store/reducers/slices/game-data.slice';
+import { resetMessages, setGame } from '../../app/store/reducers/slices/game-data.slice';
 import { hubSocketConnection } from '../../app/store/reducers/slices/socket-messages.slice';
 
 export const PopupComponent: React.FC = () => {
@@ -12,6 +12,7 @@ export const PopupComponent: React.FC = () => {
     const closeConnection = () => {
         console.log('CLOSE WS CONNECTION'); //PLACEHOLDER
         dispatch(setGame(null));
+        dispatch(resetMessages());
         dispatch(hubSocketConnection());
     }
 

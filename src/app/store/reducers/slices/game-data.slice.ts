@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { GameTableCol, GameTableRow } from '@user530/ws_game_shared/enums';
-import { StorePlayerData, StoreGameData, OpenLobbyStateData, LobbyStateData, TurnData, MessageData } from '@user530/ws_game_shared/interfaces/general';
+import { StorePlayerData, StoreGameData, OpenLobbyStateData, LobbyStateData, TurnData } from '@user530/ws_game_shared/interfaces/general';
 import { PopupGameResult, PopupError } from '../../../functions/popup.creator';
 import { ChatEventNewMsgData } from '@user530/ws_game_shared/interfaces/ws-events';
 

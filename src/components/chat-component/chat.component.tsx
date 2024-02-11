@@ -14,13 +14,12 @@ interface IChatComponent {
 export const ChatComponent: React.FC<IChatComponent> = (props: IChatComponent) => {
 
     const messages = useAppSelector(state => state.gameData.messages);
-    const user = useAppSelector(state => state.gameData.player?.playerName);
+    const user = useAppSelector(state => state.gameData.player?.playerId);
     const inputRef = useRef<HTMLTextAreaElement>(null);
     const [inputLen, setInputLen] = React.useState<number>(0);
     const dispatch = useAppDispatch();
 
     const chatSendBtnHandler = React.useCallback(() => {
-        console.log('SEND CHAT MSG BTN FIRED');
         // Handle exceptions
         if (!user || !inputRef.current) {
             const errEvent = createErrorPopup({ heading: 'Error #401', message: 'Can\'t send message if not authorized!' });
@@ -38,7 +37,7 @@ export const ChatComponent: React.FC<IChatComponent> = (props: IChatComponent) =
         // Clear the input
         inputRef.current.value = '';
 
-    }, [user]);
+    }, [user, dispatch]);
 
     return <>
         <div className={styles['chat-wrapper']}>
@@ -59,7 +58,7 @@ export const ChatComponent: React.FC<IChatComponent> = (props: IChatComponent) =
                     <textarea
                         ref={inputRef}
                         className={styles['textarea__input']}
-                        placeholder='Message text'
+                        placeholder='Message text&#10;For the DM try "/w <user_name> <your message>"'
                         maxLength={255}
                         onChange={(e) => setInputLen(e.target.value.length)}
                     />

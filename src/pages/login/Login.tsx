@@ -38,7 +38,7 @@ export const Login: React.FC = () => {
                 {
                     isLoading
                         ? <p>LOADING...</p>
-                        : error === ''
+                        : error !== ''
                             ? <p>ERROR: ${error}</p>
                             : players.map(
                                 ({ name }, ind) => (

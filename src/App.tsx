@@ -6,6 +6,7 @@ import { TestLoginPage } from './pages/test-login';
 import { GameHubPage } from './pages/game-hub/game-hub';
 import { GameStatus } from '@user530/ws_game_shared/enums';
 import { GameLobbyPage } from './pages/game-lobby/game-lobby';
+import { Login } from './pages/login/Login';
 
 function App() {
   const playerId = useAppSelector((state) => state.gameData.player?.playerId);
@@ -20,7 +21,7 @@ function App() {
             ? <GameLobbyPage />
             : playerId
               ? <GameHubPage />
-              : <TestLoginPage />
+              : <Login />
       }
 
     </div>

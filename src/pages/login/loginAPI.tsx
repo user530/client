@@ -1,13 +1,19 @@
 import axios from 'axios';
 
 const wsGameApi = axios.create({
-    baseURL: 'http://localhost:5000/api/v1',
+    baseURL: process.env.REACT_APP_API_BASE_URL,
+    headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Content-Type': 'application/json',
+    }
 });
 
-export const apiPlayerEndpoint = '/player';
+export const apiPlayerEndpoint = '/players';
 
 export const getPlayers = async () => {
+    console.log('Login API - getPlayers fired!');
     const res = await wsGameApi.get(apiPlayerEndpoint);
+    console.log(res);
     return res.data;
 }
 

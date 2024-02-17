@@ -1,11 +1,19 @@
 import React from 'react';
 import styles from './Login.module.css';
 import { getPlayers } from './loginAPI';
+import { Loader } from '../../components/loader-component/Loader';
+import { PlayerItem } from '../../components/player-item/Player-item';
+
+interface PlayerData {
+    id: string;
+    name: string;
+}
 
 export const Login: React.FC = () => {
     const [isLoading, setIsLoading] = React.useState<boolean>(false);
     const [error, setError] = React.useState<string>('');
-    const [players, setPlayers] = React.useState<{ name: string, id: string }[]>([]);
+    const [players, setPlayers] = React.useState<PlayerData[]>([]);
+    const [selectedPlayer, setSelectedPlayer] = React.useState<PlayerData>();
 
     React.useEffect(
         () => {
@@ -38,25 +46,55 @@ export const Login: React.FC = () => {
     )
 
     return (
-        <>
-            <div className={styles['wrapper']}>
-                {
-                    isLoading
-                        ? <p>LOADING...</p>
-                        : error !== ''
-                            ? <p>ERROR: {error}</p>
-                            : players.map(
-                                ({ name, id }, ind) => (
-                                    <div key={name}>
-                                        <p>{ind + 1}</p>
-                                        <p>{name}</p>
-                                        <p>{id}</p>
-                                    </div>
-                                )
-                            )
-                }
 
+
+        isLoading
+            ? <Loader />
+            :
+            <div className={styles['wrapper']}>
+                <div className={styles['content']}>
+                    <div className={styles['content-header']}>
+                        <h1 className={styles['h1']}>Login:</h1>
+                    </div>
+
+                    <div className={styles['content-body']}>
+                        <div className={styles['body-inner']}>
+                            {
+                                error !== ''
+                                    ? error
+                                    : null
+                            }
+
+                            {
+                                players.length > 0
+                                    ? players.map(
+                                        (player, ind) => (
+                                            <PlayerItem
+                                                key={player.id}
+                                                index={ind + 1}
+                                                playerName={player.name}
+                                                isSelected={selectedPlayer?.id === player.id}
+                                                clickHandler={() => setSelectedPlayer(player)}
+                                            />
+                                        )
+                                    )
+                                    : null
+                            }
+                        </div>
+                    </div>
+
+                    {
+                        (error === '' && players)
+                            ?
+                            <div className={styles['content-footer']}>
+                                <button className={styles['footer-btn']}>Add player</button>
+                                <button className={`${styles['footer-btn']} ${styles['footer-btn--big']}`}>Enter!</button>
+                            </div>
+                            : null
+                    }
+
+                </div>
             </div>
-        </>
+
     )
 }

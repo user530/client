@@ -1,0 +1,32 @@
+.player-item {
+    width: 100%;
+    padding: 5px 15px;
+    color: black;
+    display: flex;
+    column-gap: 15px;
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.player-item:hover {
+    color: white;
+    background-color: lightblue;
+    border-bottom: 1px solid black;
+}
+
+.player-item--selected {
+    color: white;
+    background-color: var(--gold);
+}
+
+.player-item__index {
+    width: 20px;
+    padding: 5px;
+    text-align: center;
+}
+
+.player-item__name {
+    flex-grow: 1;
+    padding: 5px;
+}

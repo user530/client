@@ -13,7 +13,7 @@ export const Login: React.FC = () => {
     const [isLoading, setIsLoading] = React.useState<boolean>(false);
     const [error, setError] = React.useState<string>('');
     const [players, setPlayers] = React.useState<PlayerData[]>([]);
-    const [selectedPlayer, setSelectedPlayer] = React.useState<PlayerData>();
+    const [selectedPlayer, setSelectedPlayer] = React.useState<PlayerData | null>(null);
 
     React.useEffect(
         () => {
@@ -51,7 +51,7 @@ export const Login: React.FC = () => {
         isLoading
             ? <Loader />
             :
-            <div className={styles['wrapper']}>
+            <div className={styles['wrapper']} onClick={() => setSelectedPlayer(null)}>
                 <div className={styles['content']}>
                     <div className={styles['content-header']}>
                         <h1 className={styles['h1']}>Login:</h1>
@@ -74,7 +74,11 @@ export const Login: React.FC = () => {
                                                 index={ind + 1}
                                                 playerName={player.name}
                                                 isSelected={selectedPlayer?.id === player.id}
-                                                clickHandler={() => setSelectedPlayer(player)}
+                                                clickHandler={
+                                                    (e) => {
+                                                        e.stopPropagation();
+                                                        setSelectedPlayer(player);
+                                                    }}
                                             />
                                         )
                                     )
@@ -84,13 +88,17 @@ export const Login: React.FC = () => {
                     </div>
 
                     {
-                        (error === '' && players)
-                            ?
+                        (error !== '' || !players)
+                            ? null
+                            :
                             <div className={styles['content-footer']}>
                                 <button className={styles['footer-btn']}>Add player</button>
-                                <button className={`${styles['footer-btn']} ${styles['footer-btn--big']}`}>Enter!</button>
+                                {
+                                    selectedPlayer
+                                        ? <button className={`${styles['footer-btn']} ${styles['footer-btn--big']}`}>Enter!</button>
+                                        : null
+                                }
                             </div>
-                            : null
                     }
 
                 </div>

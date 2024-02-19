@@ -3,6 +3,9 @@ import styles from './Login.module.css';
 import { getPlayers } from './loginAPI';
 import { Loader } from '../../components/loader-component/Loader';
 import { PlayerItem } from '../../components/player-item/Player-item';
+import { useDispatch } from 'react-redux';
+import { hubSocketConnection } from '../../app/store/reducers/slices/socket-messages.slice';
+import { setPlayer } from '../../app/store/reducers/slices/game-data.slice';
 
 interface PlayerData {
     id: string;
@@ -14,6 +17,17 @@ export const Login: React.FC = () => {
     const [error, setError] = React.useState<string>('');
     const [players, setPlayers] = React.useState<PlayerData[]>([]);
     const [selectedPlayer, setSelectedPlayer] = React.useState<PlayerData | null>(null);
+
+    const dispatch = useDispatch();
+
+
+    const loginHandler = () => {
+        if (!selectedPlayer) return;
+
+        const { id: playerId, name: playerName } = selectedPlayer;
+        dispatch(setPlayer({ playerId, playerName }));
+        dispatch(hubSocketConnection());
+    }
 
     React.useEffect(
         () => {
@@ -95,7 +109,10 @@ export const Login: React.FC = () => {
                                 <button className={styles['footer-btn']}>Add player</button>
                                 {
                                     selectedPlayer
-                                        ? <button className={`${styles['footer-btn']} ${styles['footer-btn--big']}`}>Enter!</button>
+                                        ? <button
+                                            className={`${styles['footer-btn']} ${styles['footer-btn--big']}`}
+                                            onClick={loginHandler}
+                                        >Enter!</button>
                                         : null
                                 }
                             </div>

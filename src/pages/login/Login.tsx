@@ -1,49 +1,65 @@
-import React from 'react';
+import React, { FormEvent } from 'react';
 import styles from './Login.module.css';
-import { getPlayers } from './loginAPI';
+import { getPlayers, addPlayer, CreatePlayerDTO, ResponsePlayerDTO } from './loginAPI';
 import { Loader } from '../../components/loader-component/Loader';
 import { PlayerItem } from '../../components/player-item/Player-item';
 import { useDispatch } from 'react-redux';
 import { hubSocketConnection } from '../../app/store/reducers/slices/socket-messages.slice';
 import { setPlayer } from '../../app/store/reducers/slices/game-data.slice';
 
-interface PlayerData {
-    id: string;
-    name: string;
-}
-
 export const Login: React.FC = () => {
     const [isLoading, setIsLoading] = React.useState<boolean>(false);
     const [error, setError] = React.useState<string>('');
-    const [players, setPlayers] = React.useState<PlayerData[]>([]);
-    const [selectedPlayer, setSelectedPlayer] = React.useState<PlayerData | null>(null);
+    const [players, setPlayers] = React.useState<ResponsePlayerDTO[]>([]);
+    const [selectedPlayer, setSelectedPlayer] = React.useState<ResponsePlayerDTO | null>(null);
+    const [showForm, setShowForm] = React.useState<boolean>(false);
 
     const dispatch = useDispatch();
 
-
-    const loginHandler = () => {
+    const loginHandler = (): void => {
         if (!selectedPlayer) return;
 
         const { id: playerId, name: playerName } = selectedPlayer;
         dispatch(setPlayer({ playerId, playerName }));
         dispatch(hubSocketConnection());
+    };
+
+    const addPlayerHandler = (): void => {
+        console.log('Add player handler fired!');
+        setShowForm(true);
+    }
+
+    const submitToDTO = (e: FormEvent<HTMLFormElement>): CreatePlayerDTO => {
+        const { target } = e;
+        const formData = new FormData(target as HTMLFormElement);
+
+        return { name: 'test' }
+    }
+
+    const createPlayerHandler = async (createPlayerDTO: CreatePlayerDTO): Promise<void> => {
+        console.log('Add player submit fired!');
+        const { name } = createPlayerDTO;
+        const newPlayer = await addPlayer({ name });
+        console.log('Add player:');
+        console.log(newPlayer);
+
+        setShowForm(false);
     }
 
     React.useEffect(
         () => {
-            setIsLoading((prev) => true);
+            setIsLoading(true);
             fetch()
-            setIsLoading((prev) => false);
-
+            setIsLoading(false);
 
             async function fetch() {
                 try {
                     console.log('Sideeffect Fetch - Start fetch...');
                     const players = await getPlayers();
                     console.log('Sideeffect Fetch - Setting players');
-                    setPlayers((prev) => players);
+                    setPlayers(players);
                     console.log('Sideeffect Fetch - Reset Error');
-                    setError((prev) => '');
+                    setError('');
                 } catch (error) {
                     let err = error as Error;
                     console.log('Sideeffect Fetch - Error!')
@@ -52,7 +68,7 @@ export const Login: React.FC = () => {
                     if (err.message)
                         errMsg = err.message;
 
-                    setError((prev) => errMsg);
+                    setError(errMsg);
                 }
             }
         },
@@ -60,8 +76,6 @@ export const Login: React.FC = () => {
     )
 
     return (
-
-
         isLoading
             ? <Loader />
             :
@@ -98,6 +112,16 @@ export const Login: React.FC = () => {
                                     )
                                     : null
                             }
+
+                            {
+                                showForm
+                                    ? <form onSubmit={(e) => { e.preventDefault(); submitToDTO(e); }}>
+                                        <input type="text" name='name' placeholder='User name' />
+
+                                        <button type='submit'>Add user</button>
+                                    </form>
+                                    : null
+                            }
                         </div>
                     </div>
 
@@ -106,7 +130,10 @@ export const Login: React.FC = () => {
                             ? null
                             :
                             <div className={styles['content-footer']}>
-                                <button className={styles['footer-btn']}>Add player</button>
+                                <button
+                                    className={styles['footer-btn']}
+                                    onClick={addPlayerHandler}
+                                >Add player</button>
                                 {
                                     selectedPlayer
                                         ? <button

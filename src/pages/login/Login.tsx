@@ -1,6 +1,6 @@
-import React, { FormEvent } from 'react';
+import React from 'react';
 import styles from './Login.module.css';
-import { getPlayers, addPlayer, CreatePlayerDTO, ResponsePlayerDTO } from './loginAPI';
+import { getPlayers, ResponsePlayerDTO } from './loginAPI';
 import { Loader } from '../../components/loader-component/Loader';
 import { PlayerItem } from '../../components/player-item/Player-item';
 import { useDispatch } from 'react-redux';
@@ -12,7 +12,6 @@ export const Login: React.FC = () => {
     const [error, setError] = React.useState<string>('');
     const [players, setPlayers] = React.useState<ResponsePlayerDTO[]>([]);
     const [selectedPlayer, setSelectedPlayer] = React.useState<ResponsePlayerDTO | null>(null);
-    const [showForm, setShowForm] = React.useState<boolean>(false);
 
     const dispatch = useDispatch();
 
@@ -24,28 +23,6 @@ export const Login: React.FC = () => {
         dispatch(hubSocketConnection());
     };
 
-    const addPlayerHandler = (): void => {
-        console.log('Add player handler fired!');
-        setShowForm(true);
-    }
-
-    const submitToDTO = (e: FormEvent<HTMLFormElement>): CreatePlayerDTO => {
-        const { target } = e;
-        const formData = new FormData(target as HTMLFormElement);
-
-        return { name: 'test' }
-    }
-
-    const createPlayerHandler = async (createPlayerDTO: CreatePlayerDTO): Promise<void> => {
-        console.log('Add player submit fired!');
-        const { name } = createPlayerDTO;
-        const newPlayer = await addPlayer({ name });
-        console.log('Add player:');
-        console.log(newPlayer);
-
-        setShowForm(false);
-    }
-
     React.useEffect(
         () => {
             setIsLoading(true);
@@ -54,16 +31,15 @@ export const Login: React.FC = () => {
 
             async function fetch() {
                 try {
-                    console.log('Sideeffect Fetch - Start fetch...');
+
                     const players = await getPlayers();
-                    console.log('Sideeffect Fetch - Setting players');
+
                     setPlayers(players);
-                    console.log('Sideeffect Fetch - Reset Error');
+
                     setError('');
                 } catch (error) {
                     let err = error as Error;
-                    console.log('Sideeffect Fetch - Error!')
-                    console.log(error);
+
                     let errMsg = 'Something went wrong during data fetch!';
                     if (err.message)
                         errMsg = err.message;
@@ -112,38 +88,16 @@ export const Login: React.FC = () => {
                                     )
                                     : null
                             }
-
-                            {
-                                showForm
-                                    ? <form onSubmit={(e) => { e.preventDefault(); submitToDTO(e); }}>
-                                        <input type="text" name='name' placeholder='User name' />
-
-                                        <button type='submit'>Add user</button>
-                                    </form>
-                                    : null
-                            }
                         </div>
                     </div>
 
-                    {
-                        (error !== '' || !players)
-                            ? null
-                            :
-                            <div className={styles['content-footer']}>
-                                <button
-                                    className={styles['footer-btn']}
-                                    onClick={addPlayerHandler}
-                                >Add player</button>
-                                {
-                                    selectedPlayer
-                                        ? <button
-                                            className={`${styles['footer-btn']} ${styles['footer-btn--big']}`}
-                                            onClick={loginHandler}
-                                        >Enter!</button>
-                                        : null
-                                }
-                            </div>
-                    }
+                    <div className={styles['content-footer']}>
+                        <button
+                            className={`${styles['footer-btn']} ${styles['footer-btn--big']}`}
+                            onClick={loginHandler}
+                            disabled={selectedPlayer === null}
+                        >Enter!</button>
+                    </div>
 
                 </div>
             </div>

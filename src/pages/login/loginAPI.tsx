@@ -18,15 +18,14 @@ export type ResponsePlayerDTO = {
 export type CreatePlayerDTO = Pick<ResponsePlayerDTO, 'name'>
 
 export const getPlayers = async (): Promise<ResponsePlayerDTO[]> => {
-    console.log('Login API - getPlayers fired!');
     const res = await wsGameApi.get(apiPlayerEndpoint);
-    console.log(res);
+
     return res.data;
 }
 
 export const addPlayer = async (addPlayerDTO: { name: string }): Promise<ResponsePlayerDTO> => {
     const { name } = addPlayerDTO;
-    console.log('Login API - addPlayer fired!', name);
+
     const res = await wsGameApi.post(apiPlayerEndpoint, name);
     return res.data;
 }

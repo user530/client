@@ -44,12 +44,15 @@
 }
 
 .body-inner {
-    overflow: hidden;
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+    border: 1px solid black;
 }
 
 .content-footer {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     height: 100px;
     padding: 25px;
 }

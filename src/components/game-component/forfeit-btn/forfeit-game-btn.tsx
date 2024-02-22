@@ -16,7 +16,6 @@ export const ForfeitGameBtn: React.FC<IForfeitGameBtn> = (props: IForfeitGameBtn
     const dispatch = useAppDispatch();
 
     const forfeitBtnHandler = () => {
-        console.log('Forfeit Game Handler fired!')
         if (!playerId || !gameId || !isValidUUID(playerId) || !isValidUUID(gameId))
             return alert('PROVIDE CORRECT gameId and playerId!');
 

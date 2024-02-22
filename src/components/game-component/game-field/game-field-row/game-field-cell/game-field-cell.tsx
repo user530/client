@@ -14,8 +14,6 @@ interface IGameFieldCell {
 export const GameFieldCell: React.FC<IGameFieldCell> = (props: IGameFieldCell) => {
     const { col: column, row } = props;
 
-    console.log(`GAME FIELD CELL ${row}:${column}`)
-
     const playerId = useAppSelector((state) => state.gameData.player?.playerId);
     const gameId = useAppSelector((state) => state.gameData.game?.gameId);
     const cellMark = useAppSelector((state) => state.gameData.gameField[row][column])

@@ -18,25 +18,20 @@ export const LobbyComponent: React.FC<ILobbyComponent> = () => {
             : 'guest');
 
     const handleLeaveLobbyClick = () => {
-        console.log('Handle Leave Lobby Click');
-
         dispatch(sendSocketCommand(createLobbyLeaveMessage({ playerId, gameId })))
     };
 
     const handleKickGuestClick = () => {
-        console.log('Handle Kick Guest Click');
-        console.log(playerRole)
-        console.log(guest)
-        if (playerRole === 'guest' || !guest) return;
+        if (playerRole === 'guest' || !guest)
+            return;
+
         dispatch(sendSocketCommand(createLobbyKickMessage({ gameId, playerId })));
     };
 
     const handleStartGameClick = () => {
-        console.log('Handle Start Game Click');
-        console.log(playerRole)
-        console.log(guest)
+        if (playerRole === 'guest' || !guest)
+            return;
 
-        if (playerRole === 'guest' || !guest) return;
         dispatch(sendSocketCommand(createLobbyStartMessage({ gameId, playerId: host.hostId })));
     };
 

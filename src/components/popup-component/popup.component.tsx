@@ -10,7 +10,6 @@ export const PopupComponent: React.FC = () => {
     const dispatch = useAppDispatch();
 
     const closeConnection = () => {
-        console.log('CLOSE WS CONNECTION'); //PLACEHOLDER
         dispatch(setGame(null));
         dispatch(resetMessages());
         dispatch(hubSocketConnection());

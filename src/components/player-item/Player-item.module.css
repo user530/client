@@ -12,7 +12,6 @@
 .player-item:hover {
     color: white;
     background-color: lightblue;
-    border-bottom: 1px solid black;
 }
 
 .player-item--selected {

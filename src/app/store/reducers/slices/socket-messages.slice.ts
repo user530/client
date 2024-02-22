@@ -19,7 +19,6 @@ const socketMessagesSlice = createSlice({
     initialState,
     reducers: {
         handleFailedAuth() {
-            console.log('FAILED SOCKET AUTHENTICATION!');
             // ERROR LOGIC PLACEHOLDER
             throw new Error('FAILED SOCKET AUTHENTICATION!');
         },

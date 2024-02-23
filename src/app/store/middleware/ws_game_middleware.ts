@@ -13,6 +13,8 @@ export const createWSMiddleware: Middleware<any, any, Dispatch<AnyAction>> =
     (api: MiddlewareAPI<StoreDispatch, RootState>) => {
         let socket: Socket;
 
+        const WS_URL = process.env.REACT_APP_WS_BASE_URL || 'http://localhost:8888';
+
         const errorEventHandler: ErrorEventsHandler = {
             async wsErrorListener(errEvent: ErrorEvent) {
                 const { code, message } = errEvent;
@@ -149,7 +151,7 @@ export const createWSMiddleware: Middleware<any, any, Dispatch<AnyAction>> =
                 socket?.disconnect();
 
                 // Connect to the WS hub namespace with auth
-                socket = io('http://localhost:5000/hub',
+                socket = io(`${WS_URL}/hub`,
                     {
                         auth: {
                             userId: player?.playerId,
@@ -180,7 +182,7 @@ export const createWSMiddleware: Middleware<any, any, Dispatch<AnyAction>> =
                 socket?.disconnect();
 
                 // Connect to the WS lobby namespace with auth
-                socket = io('http://localhost:5000/lobby',
+                socket = io(`${WS_URL}/lobby`,
                     {
                         auth: {
                             userId: player?.playerId,
@@ -216,7 +218,7 @@ export const createWSMiddleware: Middleware<any, any, Dispatch<AnyAction>> =
                 socket?.disconnect();
 
                 // Connect to the WS game namespace with auth
-                socket = io('http://localhost:5000/game',
+                socket = io(`${WS_URL}/game`,
                     {
                         auth: {
                             userId: player.playerId,

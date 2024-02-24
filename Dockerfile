@@ -1,7 +1,7 @@
 # BUILD STAGE
 FROM node:current-alpine3.19 AS build
 
-WORKDIR /app/build
+WORKDIR /app
 
 COPY --chown=node:node package*.json .
 
@@ -27,8 +27,9 @@ USER node
 # PRODUCTION STAGE
 FROM nginx AS prod
 
-COPY --from=build --chown=node:node /app/build/build /user/share/nginx/html
+COPY --from=build --chown=node:node /app/nginx.conf /etc/nginx/nginx.conf 
+COPY --from=build --chown=node:node /app/build /usr/share/nginx/html
 
-EXPOSE 3000
+EXPOSE 80
 
 CMD ["nginx", "-g", "daemon off;"]

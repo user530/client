@@ -12,3 +12,18 @@
     width: 30%;
 }
 
+@media (max-width: 991px) {
+    .flex {
+        flex-direction: column-reverse;
+        justify-content: flex-end;
+        max-width: 500px;
+        margin: 0 auto;
+        row-gap: 16px;
+    }
+
+    .column-main, .column-sub {
+        width: 100%;
+        height: 50%;
+    }
+}
+

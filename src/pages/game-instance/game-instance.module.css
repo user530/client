@@ -15,3 +15,24 @@
     height: calc(100% - 50px - 500px);
     width: 70%;
 }
+
+
+@media (max-width: 991px) {
+    .flex-column {
+        row-gap: 16px;
+        width: 100%;
+        max-width: 500px;
+        margin: 0 auto;
+    }
+
+    .row-1 {
+        height: auto;
+        width: auto;
+        flex-shrink: 0;
+    }
+
+    .row-2 {
+        flex-grow: 1;
+        width: 100%;
+    }
+}

@@ -28,3 +28,11 @@
 .forfeit-btn:active {
     background-color: var(--orangeDark);
 }
+
+@media (max-width: 991px) {
+    .forfeit-btn {
+        padding-inline: 20px;
+        height: 40px;
+        font-size: 14px;
+    }
+}

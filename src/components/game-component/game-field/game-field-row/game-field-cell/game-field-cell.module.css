@@ -42,3 +42,11 @@
 .cell:active {
     background-color: var(--gold);
 }
+
+@media (max-width: 991px) {
+    .cell {
+        width: 80px;
+        height: 80px;
+        font-size: 50px;
+    }
+}

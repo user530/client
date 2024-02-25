@@ -7,10 +7,10 @@
     transition: 0.3s;
     border-bottom: 1px solid #dedede;
     user-select: none;
-}
 
-.item + .item {
-    padding-top: 15px;
+    & + .item {
+        padding-top: 15px;
+    }
 }
 
 .item:hover {
@@ -33,4 +33,27 @@
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
+}
+
+@media (max-width: 991px) {
+    .item {
+        padding: 0 10px 10px 10px;
+        column-gap: 20px;
+        font-size: 16px;
+
+        & + .item {
+            padding: 10px;
+        }
+
+        &:hover {
+            padding: 15px 10px;
+        }
+    }
+
+    .item--selected, .item--selected:hover{
+        padding: 15px 10px;
+        background-color: lightskyblue;
+        color: white;
+    }
+    
 }

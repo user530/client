@@ -22,3 +22,11 @@
 .chat-msg__text {
     word-break: break-all;
 }
+
+@media (max-width: 991px) {
+    .chat-msg {
+        font-size: 14px;
+        column-gap: 5px;
+        margin-bottom: 5px;
+    }
+}

@@ -19,7 +19,7 @@ export const ChatComponent: React.FC<IChatComponent> = (props: IChatComponent) =
     const [inputLen, setInputLen] = React.useState<number>(0);
     const dispatch = useAppDispatch();
 
-    const chatSendBtnHandler = React.useCallback(() => {
+    const chatSendMsgHandler = React.useCallback(() => {
         // Handle exceptions
         if (!user || !inputRef.current) {
             const errEvent = createErrorPopup({ heading: 'Error #401', message: 'Can\'t send message if not authorized!' });
@@ -38,6 +38,22 @@ export const ChatComponent: React.FC<IChatComponent> = (props: IChatComponent) =
         inputRef.current.value = '';
 
     }, [user, dispatch]);
+
+    const chatSendKeyHandler = React.useCallback((e: KeyboardEvent) => {
+        if (e.key === 'Enter' && e.shiftKey === false) {
+            e.preventDefault();
+            chatSendMsgHandler();
+        }
+    }, [chatSendMsgHandler]);
+
+    React.useEffect(
+        () => {
+            window.addEventListener('keydown', chatSendKeyHandler);
+
+            return () => window.removeEventListener('keydown', chatSendKeyHandler);
+        },
+        [chatSendKeyHandler]
+    )
 
     return <>
         <div className={styles['chat-wrapper']}>
@@ -58,7 +74,7 @@ export const ChatComponent: React.FC<IChatComponent> = (props: IChatComponent) =
                     <textarea
                         ref={inputRef}
                         className={styles['textarea__input']}
-                        placeholder='Message text&#10;For the DM try "/w <user_name> <your message>"'
+                        placeholder='For the DM try "/w <user_name> <your message>"'
                         maxLength={255}
                         onChange={(e) => setInputLen(e.target.value.length)}
                     />
@@ -71,7 +87,7 @@ export const ChatComponent: React.FC<IChatComponent> = (props: IChatComponent) =
                     className={styles['chat-controls__btn']}
                     type="button"
                     value="Send"
-                    onClick={chatSendBtnHandler}
+                    onClick={chatSendMsgHandler}
                 />
             </div>
         </div>

@@ -2,6 +2,7 @@
     display: flex;
     flex-direction: column;
     height: 100%;
+    min-height: 200px;
     box-shadow: 0 0 20px rgba(255, 255, 255, 0.6);
     background-color: var(--whitish);
     padding: 15px;
@@ -135,4 +136,42 @@
 
 .chat-controls__btn:active {
     background-color: var(--orangeDark);
+}
+
+@media (max-width: 991px) {
+    .chat-wrapper {
+        padding: 10px;
+    }
+
+    .chat-heading {
+        height: auto;
+        padding-bottom: 10px;
+    }
+
+    .h2 {
+        font-size: 20px;
+    }
+
+    .chat-main {
+        padding-top: 10px;
+        height: calc(100% - 10px - 10px - 37px - 71px);
+    }
+
+    .chat-controls {
+        padding-top: 10px;
+        column-gap: 5px;
+    }
+
+    .chat-controls__btn{
+        padding-inline: 10px;
+        height: 40px;
+        font-size: 14px;
+        align-self: center;
+    }
+
+    .textarea__input::placeholder{
+        font-family: inherit;
+        font-size: 14px;
+    }
+
 }

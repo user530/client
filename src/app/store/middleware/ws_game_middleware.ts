@@ -13,7 +13,8 @@ export const createWSMiddleware: Middleware<any, any, Dispatch<AnyAction>> =
     (api: MiddlewareAPI<StoreDispatch, RootState>) => {
         let socket: Socket;
 
-        const WS_URL = process.env.REACT_APP_WS_BASE_URL || 'http://localhost:8888';
+        const WS_DOMAIN = process.env.REACT_APP_WS_DOMAIN || 'http://localhost:8888';
+        const WS_PATH = process.env.REACT_APP_WS_PATH || '/socket.io';
 
         const errorEventHandler: ErrorEventsHandler = {
             async wsErrorListener(errEvent: ErrorEvent) {
@@ -151,11 +152,12 @@ export const createWSMiddleware: Middleware<any, any, Dispatch<AnyAction>> =
                 socket?.disconnect();
 
                 // Connect to the WS hub namespace with auth
-                socket = io(`${WS_URL}/hub`,
+                socket = io(`${WS_DOMAIN}/hub`,
                     {
+                        path: WS_PATH,
                         auth: {
                             userId: player?.playerId,
-                        }
+                        },
                     });
 
                 // Debug listeners
@@ -182,8 +184,9 @@ export const createWSMiddleware: Middleware<any, any, Dispatch<AnyAction>> =
                 socket?.disconnect();
 
                 // Connect to the WS lobby namespace with auth
-                socket = io(`${WS_URL}/lobby`,
+                socket = io(`${WS_DOMAIN}/lobby`,
                     {
+                        path: WS_PATH,
                         auth: {
                             userId: player?.playerId,
                             gameId: game?.gameId,
@@ -218,8 +221,9 @@ export const createWSMiddleware: Middleware<any, any, Dispatch<AnyAction>> =
                 socket?.disconnect();
 
                 // Connect to the WS game namespace with auth
-                socket = io(`${WS_URL}/game`,
+                socket = io(`${WS_DOMAIN}/game`,
                     {
+                        path: WS_PATH,
                         auth: {
                             userId: player.playerId,
                             gameId: game.gameId,
